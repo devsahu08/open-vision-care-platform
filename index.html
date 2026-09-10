@@ -395,8 +395,47 @@
     padding-top:26px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
     font-size:13px; color:rgba(247,244,236,0.45);
   }
+
+  /* ---------- implementation ---------- */
+  .implement{ border-top:1px solid var(--line); }
+  .implement-head{ max-width:680px; }
+  .implement-head h2{ font-size:clamp(28px,3.6vw,38px); }
+  .implement-head p{ margin-top:16px; color:var(--ink-soft); font-size:17px; }
+
+  .repo-list{
+    display:grid; gap:10px; margin:28px 0 0;
+    max-width:640px;
+  }
+  .repo-list a{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 18px; border:1.5px solid var(--line); border-radius:4px;
+    text-decoration:none; color:var(--ink); font-size:15px; font-weight:600;
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .repo-list a:hover{ border-color:var(--teal); background:var(--paper-2); }
+  .repo-list a span.tag{
+    font-weight:500; color:var(--ink-soft); font-size:13.5px;
+  }
+
+  .impl-steps{ margin-top:56px; display:grid; gap:0; }
+  .impl-step{
+    display:grid; grid-template-columns:64px 1fr; gap:24px;
+    padding:34px 0; border-top:1px solid var(--line);
+  }
+  .impl-steps .impl-step:last-child{ border-bottom:1px solid var(--line); }
+  @media (max-width:640px){ .impl-step{ grid-template-columns:1fr; gap:10px; } }
+  .impl-step .num{
+    font-family:'Fraunces',serif; font-size:26px; font-weight:600; color:var(--amber-deep);
+  }
+  .impl-step h3{ font-size:20px; font-weight:600; margin-bottom:8px; }
+  .impl-step p{ margin:0 0 14px; color:var(--ink-soft); font-size:16px; max-width:64ch; }
+  .impl-step pre{
+    background:var(--navy-deep); color:#cfe8e3;
+    border-radius:5px; padding:16px 18px; margin:0;
+    font-family:'SFMono-Regular',Consolas,monospace; font-size:13px; line-height:1.6;
+    overflow-x:auto;
+  }
 </style>
-</head>
 <body>
 
 <header>
@@ -412,12 +451,9 @@
     <div class="navlinks-wrap">
       <ul class="navlinks">
         <li><a href="#mission">Mission</a></li>
-        <li><a href="#vision">Vision</a></li>
-        <li><a href="#programs">How it works</a></li>
-        <li><a href="#platform">The platform</a></li>
-        <li><a href="#involved">Get involved</a></li>
+        <li><a href="#implement">Get started</a></li>
       </ul>
-      <a class="nav-cta" href="#involved">Donate</a>
+      <a class="nav-cta" href="#implement">Get the code</a>
     </div>
   </nav>
 </header>
@@ -433,10 +469,10 @@
           <span>iCare Brighter Future Foundation</span>
         </div>
         <h1>Every child deserves<br>to see the <em>board</em>.</h1>
-        <p class="lede">We provide affordable eyeglasses to underfunded schools and elderly communities — starting in India, and beyond. A student-led team proving that real change doesn't require a medical degree, just a little of your time.</p>
+        <p class="lede">We provide affordable eyeglasses to underfunded schools and elderly communities — starting in India, and beyond. This is the open-source platform behind our camps, free for any nonprofit to run.</p>
         <div class="hero-ctas">
-          <a href="#involved" class="btn btn-primary">Volunteer now</a>
-          <a href="#platform" class="btn btn-ghost">Explore the open platform</a>
+          <a href="#mission" class="btn btn-primary">Read our mission</a>
+          <a href="#implement" class="btn btn-ghost">Get the code</a>
         </div>
       </div>
 
@@ -473,180 +509,88 @@
         <blockquote>
           To provide affordable eyeglasses to needy people around the world — beginning with underfunded schools and elderly communities.
         </blockquote>
-        <p class="mission-foot">Every initiative that changes lives starts with a noble idea of giving back. iCare Brighter Future Foundation is a student-led nonprofit bringing eyeglasses and vision care to underfunded schools and elderly communities worldwide — starting in India, and beyond.</p>
+        <p class="mission-foot">Every initiative that changes lives starts with a noble idea of giving back. iCare Brighter Future Foundation is a student-led nonprofit bringing eyeglasses and vision care to underfunded schools and elderly communities worldwide — starting in India, and beyond. Many children with undiagnosed vision problems silently fall behind in school, mislabelled as inattentive when they simply can't see. For elderly communities, uncorrected vision means losing the independence to read, work, or live fully. A single pair of glasses can change that — this platform exists to help any nonprofit deliver it.</p>
       </div>
     </div>
   </section>
 
-  <!-- STATS -->
-  <section class="stats section-tight">
-    <div class="wrap stats-grid">
-      <div class="stat">
-        <div class="stat-num">250<span>+</span></div>
-        <div class="stat-label">Glasses donated</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">1,200<span>+</span></div>
-        <div class="stat-label">Patients helped</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">3<span>+</span></div>
-        <div class="stat-label">Eye camps held</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">20<span>+</span></div>
-        <div class="stat-label">Volunteers</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROBLEM -->
-  <section class="problem" id="problem">
-    <div class="wrap problem-grid">
-      <div class="problem-art" aria-hidden="true">
-        <svg viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg">
-          <rect x="10" y="10" width="360" height="280" rx="6" fill="#EFEADC" stroke="#122C34" stroke-width="2"/>
-          <line x1="40" y1="60" x2="220" y2="60" stroke="#122C34" stroke-width="3" opacity="0.85"/>
-          <line x1="40" y1="90" x2="280" y2="90" stroke="#122C34" stroke-width="3" opacity="0.5"/>
-          <line x1="40" y1="120" x2="180" y2="120" stroke="#122C34" stroke-width="3" opacity="0.25"/>
-          <circle cx="300" cy="205" r="46" fill="none" stroke="#E8A33D" stroke-width="3"/>
-          <path d="M300 175 L300 205 L322 220" stroke="#E8A33D" stroke-width="3" stroke-linecap="round" fill="none" opacity="0"/>
-          <path d="M60 205C60 205 100 175 150 175C200 175 240 205 240 205C240 205 200 235 150 235C100 235 60 205 60 205Z" stroke="#3F7C74" stroke-width="2.5" fill="none" opacity="0.55"/>
-          <circle cx="150" cy="205" r="14" fill="#3F7C74" opacity="0.55"/>
-        </svg>
-      </div>
-      <div>
-        <div class="kicker">The problem</div>
-        <h2>Children are falling behind, silently.</h2>
-        <p>Many children with undiagnosed vision problems never realize they can't see properly — they simply fall behind in school and life. They sit in the back of classrooms, unable to read the board, and get labelled inattentive. The truth is they just can't see.</p>
-        <p>For elderly communities in developing countries, uncorrected vision means a loss of independence — no longer able to read, work, or live fully.</p>
-        <p>A single pair of glasses can change all of that. And yet, in underfunded schools and villages, even a basic eye screening is a luxury most never receive.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- VISION -->
-  <section class="vision" id="vision">
-    <div class="wrap vision-grid">
-      <div>
-        <div class="kicker">Our approach</div>
-        <h2>Small team. Real change.</h2>
-        <p>We're a group of high school students who decided a lack of access shouldn't decide who gets to see clearly. Starting with partner schools in India, we run eye camps, donate glasses, and track every patient we help — so no one who receives care today gets lost by tomorrow.</p>
-        <ul class="vision-list">
-          <li>
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="#E8A33D" stroke-width="1.4"/><path d="M5.5 9.2L7.8 11.5L12.8 6.5" stroke="#E8A33D" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Eye camp visits bring screening directly to schools and villages.
-          </li>
-          <li>
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="#E8A33D" stroke-width="1.4"/><path d="M5.5 9.2L7.8 11.5L12.8 6.5" stroke="#E8A33D" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Glasses donation matches every prescription to a working pair of frames.
-          </li>
-          <li>
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="#E8A33D" stroke-width="1.4"/><path d="M5.5 9.2L7.8 11.5L12.8 6.5" stroke="#E8A33D" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Patient tracking makes sure follow-up care doesn't fall through the cracks.
-          </li>
-        </ul>
-      </div>
-      <div class="vision-art" aria-hidden="true">
-        <svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="150" cy="150" r="118" stroke="#3F7C74" stroke-width="1.4" stroke-dasharray="2 7"/>
-          <circle cx="150" cy="150" r="86" stroke="#3F7C74" stroke-width="1.4" opacity="0.6"/>
-          <circle cx="150" cy="150" r="52" fill="#0f262c"/>
-          <circle cx="150" cy="150" r="52" stroke="#E8A33D" stroke-width="2"/>
-          <circle cx="132" cy="132" r="10" fill="#F7F4EC" opacity="0.9"/>
-          <line x1="150" y1="20" x2="150" y2="46" stroke="#3F7C74" stroke-width="1.4"/>
-          <line x1="150" y1="254" x2="150" y2="280" stroke="#3F7C74" stroke-width="1.4"/>
-          <line x1="20" y1="150" x2="46" y2="150" stroke="#3F7C74" stroke-width="1.4"/>
-          <line x1="254" y1="150" x2="280" y2="150" stroke="#3F7C74" stroke-width="1.4"/>
-        </svg>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROGRAMS / HOW IT WORKS -->
-  <section class="programs" id="programs">
+  <!-- IMPLEMENTATION / GET STARTED -->
+  <section class="implement" id="implement">
     <div class="wrap">
-      <div class="programs-head">
-        <div class="kicker">What we do</div>
-        <h2>Our four programs.</h2>
-        <p>Each program covers a different part of the journey from an undiagnosed vision problem to a working pair of glasses — and a student ready to lead the next one.</p>
+      <div class="implement-head">
+        <div class="kicker">Open-source platform</div>
+        <h2>Bring this to your nonprofit.</h2>
+        <p>This is the same patient registration, eye exam, campaign, and inventory system we use to run our own camps — released so other organizations doing this work don't have to build it from scratch. No cost, no lock-in.</p>
       </div>
-      <div class="steps">
-        <div class="step">
+
+      <div class="repo-list">
+        <a href="https://github.com/devsahu08/iCareBrighterFuture-api" target="_blank" rel="noopener">
+          iCareBrighterFuture-api <span class="tag">Backend · Python / Flask</span>
+        </a>
+        <a href="https://github.com/devsahu08/iCareBrighterFuture-Application" target="_blank" rel="noopener">
+          iCareBrighterFuture-Application <span class="tag">Frontend · HTML / JS</span>
+        </a>
+        <a href="https://github.com/devsahu08/iCareBrighterFuture-Database" target="_blank" rel="noopener">
+          iCareBrighterFuture-Database <span class="tag">Schema · PostgreSQL</span>
+        </a>
+      </div>
+
+      <div class="impl-steps">
+        <div class="impl-step">
           <div class="num">01</div>
-          <h3>Eye camp visits</h3>
-          <p>On-site screenings at partner schools and villages, run by volunteers.</p>
+          <div>
+            <h3>Get the code</h3>
+            <p>Clone all three repositories above into their own folders.</p>
+            <pre>git clone https://github.com/devsahu08/iCareBrighterFuture-api
+git clone https://github.com/devsahu08/iCareBrighterFuture-Application
+git clone https://github.com/devsahu08/iCareBrighterFuture-Database</pre>
+          </div>
         </div>
-        <div class="step">
+
+        <div class="impl-step">
           <div class="num">02</div>
-          <h3>Glasses donation</h3>
-          <p>Every prescription is matched to a frame the person can keep and use.</p>
+          <div>
+            <h3>Set up the database</h3>
+            <p>Create an empty PostgreSQL database, then run the schema and procedure scripts in order.</p>
+            <pre>psql -d your_org_eyecare -f PatientRegistration/patient_registration_schema.sql
+psql -d your_org_eyecare -f PatientRegistration/patient_registration_procedures.sql
+psql -d your_org_eyecare -f EyeExam/eye_exam.sql
+psql -d your_org_eyecare -f Inventory/inventory_procedures.sql</pre>
+          </div>
         </div>
-        <div class="step">
+
+        <div class="impl-step">
           <div class="num">03</div>
-          <h3>Patient tracking</h3>
-          <p>Our own software keeps every patient's exam and follow-up on record.</p>
+          <div>
+            <h3>Configure and run the API</h3>
+            <p>Copy <code>.env.example</code> to <code>.env</code> and fill in your own database and secret key values — never commit this file.</p>
+            <pre>DB_HOST=your-db-host
+DB_PASSWORD=your-own-strong-password
+FLASK_SECRET_KEY=generate-a-long-random-string
+
+pip install -r requirements.txt
+python src/api/app.py</pre>
+          </div>
         </div>
-        <div class="step">
+
+        <div class="impl-step">
           <div class="num">04</div>
-          <h3>Youth leadership</h3>
-          <p>High school students plan camps, raise funds, and lead chapters.</p>
+          <div>
+            <h3>Point the frontend at your API</h3>
+            <p>Update the API base URL in the frontend config, then host the <code>src</code> folder on any web server.</p>
+            <pre>// js/app-config-v2.js
+const API_BASE = "https://your-org-domain.org/api";</pre>
+          </div>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- PLATFORM -->
-  <section class="platform" id="platform">
-    <div class="wrap platform-grid">
-      <div>
-        <div class="kicker">Open Vision Care Platform</div>
-        <h2>The software behind our camps is free for any nonprofit to run.</h2>
-        <p>We built patient registration, eye exams, campaign management, and inventory tracking to run our own camps — then open-sourced it, so other organizations doing this work don't have to build it twice.</p>
-        <div class="platform-links">
-          <a class="btn btn-primary" href="https://devsahu08.github.io/open-vision-care-platform/" target="_blank" rel="noopener">View the platform</a>
-          <a class="btn btn-ghost" href="#involved">Bring it to your nonprofit</a>
+        <div class="impl-step">
+          <div class="num">05</div>
+          <div>
+            <h3>Create your first admin account</h3>
+            <p>The schema ships with no user accounts. Insert one Coordinator-role user directly into the database with a bcrypt-hashed password — never store it as plain text. From there, log in and create the rest of your staff accounts through the app itself.</p>
+          </div>
         </div>
       </div>
-      <div class="codecard" role="img" aria-label="Illustration of the platform's open-source repositories">
-        <div class="dots"><span></span><span></span><span></span></div>
-        <p class="line c1">open-vision-care-platform/</p>
-        <p class="line c3">├─ registration    <span class="c1">// patient intake</span></p>
-        <p class="line c3">├─ eye-exam        <span class="c1">// prescriptions</span></p>
-        <p class="line c3">├─ inventory        <span class="c1">// donated eyewear</span></p>
-        <p class="line c3">└─ campaigns      <span class="c1">// camp scheduling</span></p>
-        <p class="line c2" style="margin-top:16px;">license: free to use, fork, and run</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- GET INVOLVED -->
-  <section class="involve" id="involved">
-    <div class="wrap">
-      <div class="involve-head">
-        <div class="kicker">Join the mission</div>
-        <h2>You don't need to be a doctor.</h2>
-        <p>You don't need a degree. You just need to care — and a little of your time. High school students, real impact, India and beyond.</p>
-      </div>
-
-      <div class="involve-list">
-        <div class="involve-row">
-          <h3>Donate</h3>
-          <p>Your gift covers frames, lenses, and the cost of running an eye camp — every camp runs entirely on donations.</p>
-          <a class="btn btn-primary" href="mailto:info@icarebrighterfuture.org?subject=I'd%20like%20to%20donate">Donate now</a>
-        </div>
-        <div class="involve-row">
-          <h3>Volunteer</h3>
-          <p>Students, translators, and general volunteers are always needed on camp day — no medical background required.</p>
-          <a class="btn btn-ghost" href="mailto:info@icarebrighterfuture.org?subject=I'd%20like%20to%20volunteer">Sign up to help</a>
-        </div>
-        <div class="involve-row">
-          <h3>Partner your nonprofit</h3>
-          <p>Running a similar program? Adopt our open-source platform and get set up to run your own camps.</p>
-          <a class="btn btn-ghost" href="https://devsahu08.github.io/open-vision-care-platform/" target="_blank" rel="noopener">See the platform</a>
-        </div>
-      </div>
-    </div>
   </section>
 
 </main>
@@ -670,17 +614,15 @@
         <ul>
           <li><a href="#top">Home</a></li>
           <li><a href="#mission">Our Mission</a></li>
-          <li><a href="#involved">Volunteer</a></li>
-          <li><a href="https://icarebrighterfuture.org" target="_blank" rel="noopener">Full website</a></li>
+          <li><a href="#implement">Get Started</a></li>
         </ul>
       </div>
       <div class="foot-col">
-        <h4>Programs</h4>
+        <h4>Repositories</h4>
         <ul>
-          <li><a href="#programs">Eye Camp Visits</a></li>
-          <li><a href="#programs">Glasses Donation</a></li>
-          <li><a href="#platform">Patient Tracking</a></li>
-          <li><a href="#programs">Youth Leadership</a></li>
+          <li><a href="https://github.com/devsahu08/iCareBrighterFuture-api" target="_blank" rel="noopener">API</a></li>
+          <li><a href="https://github.com/devsahu08/iCareBrighterFuture-Application" target="_blank" rel="noopener">Application</a></li>
+          <li><a href="https://github.com/devsahu08/iCareBrighterFuture-Database" target="_blank" rel="noopener">Database</a></li>
         </ul>
       </div>
       <div class="foot-col">
