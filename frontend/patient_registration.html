@@ -1,0 +1,2836 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="view-transition" content="same-origin" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Registration – iCare Brighter Future Foundation</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap"
+    rel="stylesheet">
+  <script src="js/app-config-v2.js"></script>
+  <script src="js/layout.js"></script>
+  <style>
+    :root {
+      --navy: #0e2340;
+      --navy-2: #152d52;
+      --navy-3: #1e3f6f;
+      --teal: #1a7fa6;
+      --teal-l: #2496bf;
+      --gold: #f5a623;
+      --gold-h: #f7b84a;
+      --purple: #8b5cf6;
+      --purple-l: #a78bfa;
+      --purple-bg: #f5f3ff;
+      --white: #ffffff;
+      --bg: #f0f4f8;
+      --surface: #f8fafc;
+      --text: #0e2340;
+      --text-2: #3a5470;
+      --text-3: #7090aa;
+      --border: #d0dde8;
+      --border-2: #e4edf5;
+      --red: #d94040;
+      --red-bg: #fdf1f1;
+      --green: #1d9e6e;
+      --sb-w: 232px;
+      --hh: 60px;
+      --fh: 44px;
+      --r: 8px;
+      --rl: 12px;
+      --sh: 0 1px 3px rgba(14, 35, 64, .06), 0 4px 16px rgba(14, 35, 64, .08);
+      --shl: 0 8px 40px rgba(14, 35, 64, .18);
+      --ease: cubic-bezier(.4, 0, .2, 1);
+      --sp: .18s;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html {
+      height: 100%
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 13.5px;
+      line-height: 1.5;
+      min-height: 100%;
+      overflow-x: hidden
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(14, 35, 64, .14);
+      border-radius: 4px
+    }
+
+    svg {
+      display: inline-block;
+      vertical-align: middle;
+      flex-shrink: 0
+    }
+
+    body.busy {
+      pointer-events: none;
+    }
+
+    body.busy .main {
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+
+    body.busy .modal {
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+
+    /* Dynamic Layout Styles (Header/Sidebar/Footer) */
+    .hdr {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 300;
+      height: var(--hh);
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, .06), 0 4px 20px rgba(0, 0, 0, .28)
+    }
+
+    .hbrand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: var(--sb-w);
+      padding: 0 18px;
+      height: 100%;
+      border-right: 1px solid rgba(255, 255, 255, .08);
+      text-decoration: none;
+      flex-shrink: 0;
+      transition: width var(--sp) var(--ease);
+      overflow: hidden
+    }
+
+    .logo-mark {
+      width: 38px;
+      height: 38px;
+      flex-shrink: 0;
+      border-radius: 9px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden
+    }
+
+    .logo-text .l1 {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.15;
+      white-space: nowrap
+    }
+
+    .logo-text .l1 span {
+      color: var(--gold)
+    }
+
+    .logo-text .l2 {
+      font-size: 10.5px;
+      color: rgba(255, 255, 255, .5);
+      white-space: nowrap;
+      font-weight: 400
+    }
+
+    .hdr-tog {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      margin-left: 4px;
+      color: rgba(255, 255, 255, .6);
+      display: flex;
+      align-items: center;
+      border-radius: 6px;
+      transition: color var(--sp), background var(--sp)
+    }
+
+    .hdr-tog:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, .08)
+    }
+
+    .hdr-r {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-left: auto;
+      padding: 0 20px
+    }
+
+    .hdr-user {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255, 255, 255, .75);
+      font-size: 13px;
+      font-weight: 500
+    }
+
+    .hdr-av {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--teal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+      text-transform: uppercase;
+    }
+
+    .btn-lo {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, .08);
+      border: 1px solid rgba(255, 255, 255, .14);
+      color: rgba(255, 255, 255, .8);
+      font-size: 12.5px;
+      font-weight: 500;
+      padding: 5px 13px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background var(--sp);
+      font-family: inherit
+    }
+
+    .btn-lo:hover {
+      background: rgba(255, 255, 255, .16)
+    }
+
+    .sb {
+      position: fixed;
+      top: var(--hh);
+      left: 0;
+      bottom: var(--fh);
+      width: var(--sb-w);
+      background: var(--navy);
+      z-index: 200;
+      overflow-y: auto;
+      overflow-x: hidden;
+      border-right: 1px solid rgba(255, 255, 255, .06);
+      transition: width var(--sp) var(--ease);
+      display: flex;
+      flex-direction: column
+    }
+
+    .sb.col {
+      width: 56px
+    }
+
+    .sb-srch {
+      padding: 12px 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, .06)
+    }
+
+    .sb-sw {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, .07);
+      border: 1px solid rgba(255, 255, 255, .10);
+      border-radius: 6px;
+      padding: 7px 10px;
+      transition: background var(--sp)
+    }
+
+    .sb-sw input {
+      background: none;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 12.5px;
+      width: 100%;
+      font-family: inherit
+    }
+
+    .sb-sw svg {
+      color: rgba(255, 255, 255, .35);
+      flex-shrink: 0
+    }
+
+    .sb.col .sb-sw {
+      justify-content: center;
+      padding: 8px
+    }
+
+    .sb.col .sb-sw input,
+    .sb.col .nl,
+    .sb.col .nsec {
+      display: none
+    }
+
+    .nsec {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .25);
+      padding: 16px 18px 5px;
+      white-space: nowrap;
+      overflow: hidden
+    }
+
+    .ni {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 18px;
+      color: rgba(255, 255, 255, .58);
+      font-size: 13px;
+      text-decoration: none;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: background var(--sp), color var(--sp);
+      white-space: nowrap;
+      overflow: hidden
+    }
+
+    .ni:hover {
+      background: rgba(255, 255, 255, .06);
+      color: rgba(255, 255, 255, .88)
+    }
+
+    .ni.active {
+      background: rgba(245, 166, 35, .12);
+      color: var(--gold);
+      border-left-color: var(--gold)
+    }
+
+    .sb.col .ni {
+      justify-content: center;
+      padding: 11px;
+      border-left-width: 0
+    }
+
+    .nico {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0
+    }
+
+    .ftr {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: var(--fh);
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, .32);
+      font-size: 12px;
+      z-index: 200;
+      border-top: 1px solid rgba(255, 255, 255, .06);
+      gap: 4px
+    }
+
+    .ftr strong {
+      color: var(--gold);
+      font-weight: 600
+    }
+
+    /* Main Content Styles */
+    .main {
+      margin-top: var(--hh);
+      margin-left: var(--sb-w);
+      margin-bottom: var(--fh);
+      padding: 28px 30px;
+      transition: margin-left var(--sp) var(--ease);
+      min-height: calc(100vh - var(--hh) - var(--fh))
+    }
+
+    .main.col {
+      margin-left: 56px
+    }
+
+    .ptop {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px
+    }
+
+    .ptitle {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: -.4px
+    }
+
+    .psubtitle {
+      font-size: 13px;
+      color: var(--text-3);
+      margin-top: 2px
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 18px;
+      border-radius: var(--r);
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background var(--sp), transform var(--sp), box-shadow var(--sp);
+      white-space: nowrap
+    }
+
+    .btn:active:not(:disabled) {
+      transform: scale(.98)
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--navy)
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--gold-h);
+      box-shadow: 0 4px 12px rgba(245, 166, 35, .35)
+    }
+
+    .btn-navy {
+      background: var(--navy);
+      color: #fff
+    }
+
+    .btn-navy:hover:not(:disabled) {
+      background: var(--navy-2)
+    }
+
+    .btn-ghost {
+      background: #fff;
+      color: var(--text-2);
+      border: 1.5px solid var(--border)
+    }
+
+    .btn-ghost:hover:not(:disabled) {
+      background: var(--bg)
+    }
+
+    .btn-danger {
+      background: var(--red);
+      color: #fff
+    }
+
+    .btn-danger:hover:not(:disabled) {
+      opacity: .9
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .spin {
+      animation: spin 1s linear infinite;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: var(--rl);
+      box-shadow: var(--sh);
+      margin-bottom: 20px;
+      border: 1px solid var(--border-2)
+    }
+
+    .ch {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 14px 22px;
+      border-bottom: 1px solid var(--border-2)
+    }
+
+    .ch-ico {
+      width: 30px;
+      height: 30px;
+      background: var(--bg);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--navy-3)
+    }
+
+    .ch-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--navy)
+    }
+
+    .cb {
+      padding: 18px 22px
+    }
+
+    .fg {
+      display: grid;
+      gap: 14px
+    }
+
+    .fg-3 {
+      grid-template-columns: repeat(3, 1fr)
+    }
+
+    .fg-2 {
+      grid-template-columns: 1fr 1fr
+    }
+
+    @media(max-width:900px) {
+      .fg-3 {
+        grid-template-columns: 1fr 1fr
+      }
+    }
+
+    @media(max-width:640px) {
+
+      .fg-3,
+      .fg-2 {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      transition: opacity var(--sp)
+    }
+
+    .field label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-2);
+      text-transform: uppercase;
+      letter-spacing: .55px
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 8.5px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      font-size: 13px;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+      font-family: inherit;
+      transition: border-color var(--sp), box-shadow var(--sp);
+      appearance: none;
+      -webkit-appearance: none
+    }
+
+    .field input:disabled,
+    .field select:disabled {
+      background: var(--surface);
+      color: var(--text-3);
+      cursor: not-allowed;
+      border-color: var(--border-2);
+    }
+
+    .field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237090aa' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 30px
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(26, 127, 166, .12)
+    }
+
+    .field input.err,
+    .field select.err {
+      border-color: var(--red) !important
+    }
+
+    .field.ai-active input,
+    .field.ai-active select {
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, .2);
+    }
+
+    .fa {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 6px
+    }
+
+    .ph-cc {
+      width: 82px !important
+    }
+
+    /* Phone Layout */
+    .ph-wrap {
+      display: flex;
+      gap: 0;
+      align-items: stretch
+    }
+
+    .ph-cc {
+      border: 1.5px solid var(--border) !important;
+      border-right: none !important;
+      border-radius: 7px 0 0 7px !important;
+      padding: 8.5px 8px !important;
+      font-size: 13px;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+      font-family: inherit;
+      flex-shrink: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      min-width: 82px;
+      cursor: pointer;
+      background-image: none !important;
+      transition: border-color var(--sp), box-shadow var(--sp)
+    }
+
+    .ph-cc:focus {
+      border-color: var(--teal) !important;
+      box-shadow: 0 0 0 3px rgba(26, 127, 166, .12)
+    }
+
+    .ph-inp {
+      border-radius: 0 7px 7px 0 !important;
+      flex: 1
+    }
+
+    /* Zip Auto-Complete Dropdown Styles */
+    .zip-wrap {
+      position: relative;
+    }
+
+    .zip-spin {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: none;
+    }
+
+    .zip-spin.on {
+      display: block;
+      animation: spin .7s linear infinite;
+    }
+
+    .zip-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 100;
+      display: none;
+      margin-top: 4px;
+    }
+
+    .zip-dropdown.open {
+      display: block;
+    }
+
+    .zip-item {
+      padding: 9px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border-2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .zip-item:last-child {
+      border-bottom: none;
+    }
+
+    .zip-item:hover {
+      background: #f4f8fc;
+    }
+
+    .zip-item strong {
+      color: var(--navy);
+    }
+
+    .zip-item span {
+      color: var(--text-3);
+      font-size: 11.5px;
+      text-align: right;
+    }
+
+    .tw {
+      overflow-x: auto
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 950px;
+    }
+
+    thead tr {
+      background: var(--navy)
+    }
+
+    thead th {
+      padding: 12px 16px;
+      text-align: left;
+      color: rgba(255, 255, 255, .82);
+      font-weight: 600;
+      font-size: 11.5px;
+      letter-spacing: .3px;
+      white-space: nowrap
+    }
+
+    thead th:first-child {
+      border-radius: var(--r) 0 0 0
+    }
+
+    thead th:last-child {
+      border-radius: 0 var(--r) 0 0
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border-2);
+      transition: background var(--sp)
+    }
+
+    tbody tr:last-child {
+      border-bottom: none
+    }
+
+    tbody tr:hover {
+      background: #f4f8fc
+    }
+
+    tbody td {
+      padding: 11px 16px;
+      vertical-align: middle
+    }
+
+    .td-empty {
+      text-align: center;
+      padding: 48px 20px !important;
+      color: var(--text-3);
+      font-size: 13.5px
+    }
+
+    .ag {
+      display: flex;
+      gap: 5px;
+      align-items: center
+    }
+
+    .act {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      transition: opacity var(--sp), transform var(--sp)
+    }
+
+    .act:hover:not(:disabled) {
+      opacity: .84;
+      transform: translateY(-1px)
+    }
+
+    .act:disabled {
+      opacity: .5;
+      pointer-events: none;
+    }
+
+    .av {
+      background: var(--bg);
+      color: var(--text-2);
+      border: 1.5px solid var(--border)
+    }
+
+    .ae {
+      background: var(--navy-2);
+      color: #fff
+    }
+
+    .ad {
+      background: var(--red);
+      color: #fff
+    }
+
+    .tft {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 22px;
+      border-top: 1px solid var(--border-2);
+      flex-wrap: wrap;
+      gap: 10px
+    }
+
+    .pag {
+      display: flex;
+      gap: 4px;
+      align-items: center
+    }
+
+    .pgb {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 32px;
+      height: 32px;
+      padding: 0 4px;
+      border-radius: 6px;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      color: var(--text-2);
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background var(--sp), border-color var(--sp)
+    }
+
+    .pgb.active {
+      background: var(--navy);
+      color: #fff;
+      border-color: var(--navy)
+    }
+
+    .pgb:hover:not(.active):not(:disabled) {
+      background: var(--bg)
+    }
+
+    .pgb:disabled {
+      opacity: .35;
+      pointer-events: none
+    }
+
+    .pgtext {
+      font-size: 12.5px;
+      color: var(--text-3)
+    }
+
+    .shw {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12.5px;
+      color: var(--text-3)
+    }
+
+    .shw select {
+      padding: 4px 22px 4px 8px;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-family: inherit;
+      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%237090aa' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 7px center;
+      appearance: none;
+      -webkit-appearance: none;
+      outline: none
+    }
+
+    /* Modals */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: rgba(8, 20, 40, .55);
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+      padding: 16px
+    }
+
+    .overlay.open {
+      display: flex;
+      animation: oi .15s ease
+    }
+
+    @keyframes oi {
+      from {
+        opacity: 0
+      }
+
+      to {
+        opacity: 1
+      }
+    }
+
+    .modal {
+      background: #fff;
+      border-radius: var(--rl);
+      box-shadow: var(--shl);
+      width: 100%;
+      max-width: 740px;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: mi .2s var(--ease);
+      border: 1px solid var(--border-2)
+    }
+
+    @keyframes mi {
+      from {
+        transform: translateY(20px);
+        opacity: 0
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1
+      }
+    }
+
+    .msm {
+      max-width: 420px
+    }
+
+    .mhdr {
+      background: var(--navy);
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0
+    }
+
+    .mhl {
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .mico {
+      width: 32px;
+      height: 32px;
+      background: rgba(245, 166, 35, .18);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold)
+    }
+
+    .mtitle {
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700
+    }
+
+    .msub {
+      color: rgba(255, 255, 255, .48);
+      font-size: 11.5px;
+      margin-top: 1px
+    }
+
+    .mcls {
+      background: rgba(255, 255, 255, .1);
+      border: 1px solid rgba(255, 255, 255, .14);
+      color: rgba(255, 255, 255, .7);
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background var(--sp)
+    }
+
+    .mcls:hover {
+      background: rgba(255, 255, 255, .2);
+      color: #fff
+    }
+
+    .mbody {
+      padding: 22px 24px;
+      overflow-y: auto;
+      flex: 1;
+      scroll-behavior: smooth;
+    }
+
+    .mfoot {
+      padding: 14px 22px;
+      border-top: 1px solid var(--border-2);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      background: var(--surface);
+      flex-shrink: 0
+    }
+
+    .mg .s2 {
+      grid-column: 1/-1
+    }
+
+    .fd {
+      grid-column: 1/-1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 4px 0 2px
+    }
+
+    .fdl {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--teal);
+      white-space: nowrap
+    }
+
+    .fdln {
+      flex: 1;
+      height: 1px;
+      background: var(--border-2)
+    }
+
+    .mbody.ro .field input,
+    .mbody.ro .field select {
+      background: var(--surface) !important;
+      color: var(--text-2) !important;
+      border-color: var(--border) !important;
+      cursor: default;
+      pointer-events: none
+    }
+
+    .mbody.ro .ph-cc {
+      background: var(--surface) !important;
+      color: var(--text-2) !important;
+      border-color: var(--border) !important;
+      cursor: default;
+      pointer-events: none
+    }
+
+    .mbody.ro .phu {
+      pointer-events: none;
+      opacity: .75
+    }
+
+    /* Highlight Save Pulse */
+    @keyframes pulse-save {
+      0% {
+        box-shadow: 0 0 0 0 rgba(26, 127, 166, 0.7);
+      }
+
+      70% {
+        box-shadow: 0 0 0 10px rgba(26, 127, 166, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(26, 127, 166, 0);
+      }
+    }
+
+    .highlight-save {
+      animation: pulse-save 1.5s infinite;
+      background: var(--teal) !important;
+      color: white !important;
+    }
+
+    /* AI Voice Assistant Panel - Futuristic Purple Styling */
+    .ai-panel {
+      background: var(--purple-bg);
+      border: 1.5px solid var(--purple-l);
+      border-radius: var(--rl);
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      display: none;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 4px 15px rgba(139, 92, 246, .1);
+    }
+
+    .ai-panel.active {
+      display: flex;
+    }
+
+    .ai-ico {
+      width: 40px;
+      height: 40px;
+      background: var(--purple);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      flex-shrink: 0;
+      box-shadow: 0 0 15px rgba(139, 92, 246, .4);
+      position: relative;
+    }
+
+    .ai-ico::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px solid var(--purple);
+      opacity: 0;
+    }
+
+    .ai-panel.listening .ai-ico::after {
+      animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+
+    @keyframes ping {
+
+      75%,
+      100% {
+        transform: scale(1.4);
+        opacity: 0;
+      }
+    }
+
+    .ai-text {
+      flex: 1;
+    }
+
+    .ai-status {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--purple);
+      margin-bottom: 2px;
+    }
+
+    .ai-prompt {
+      font-size: 13.5px;
+      color: var(--text);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .btn-ai-tog {
+      background: rgba(139, 92, 246, .15);
+      color: var(--purple);
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all var(--sp);
+    }
+
+    .btn-ai-tog:hover {
+      background: var(--purple);
+      color: white;
+    }
+
+    /* Enhanced Camera & Photo Selection Upload Box */
+    .phu {
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      padding: 18px 14px;
+      text-align: center;
+      transition: border-color var(--sp), background var(--sp);
+      background: var(--surface);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 140px;
+    }
+
+    .phu.err {
+      border-color: var(--red);
+    }
+
+    .phu.ai-active {
+      border-color: var(--purple);
+      background: var(--purple-bg);
+    }
+
+    .phu input[type=file] {
+      display: none;
+    }
+
+    .photo-opt-btn {
+      transition: transform var(--sp), background var(--sp), border-color var(--sp) !important;
+    }
+
+    .photo-opt-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--teal) !important;
+      background: #f0f8fb !important;
+    }
+
+    .chkg {
+      display: flex;
+      flex-direction: column;
+      gap: 10px
+    }
+
+    .chki {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+      padding: 10px 12px;
+      border-radius: 7px;
+      border: 1.5px solid var(--border-2);
+      background: #fff;
+      transition: border-color var(--sp), background var(--sp)
+    }
+
+    .chki:hover {
+      border-color: var(--teal);
+      background: #f0f8fb
+    }
+
+    .chki.ai-active {
+      border-color: var(--purple);
+      background: var(--purple-bg);
+    }
+
+    .chki input[type=checkbox] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--teal);
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 2px
+    }
+
+    .chki span {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.45
+    }
+
+    .chki.ro input {
+      cursor: not-allowed
+    }
+
+    .chki.ro {
+      cursor: default;
+      opacity: .7
+    }
+
+    .cc {
+      padding: 30px 28px 22px;
+      text-align: center
+    }
+
+    .ciw {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--red-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      color: var(--red)
+    }
+
+    .cc h3 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--navy)
+    }
+
+    .cc p {
+      font-size: 13.5px;
+      color: var(--text-3);
+      line-height: 1.6
+    }
+
+    .cft {
+      display: flex;
+      gap: 10px;
+      padding: 14px 22px;
+      border-top: 1px solid var(--border-2);
+      justify-content: center;
+      background: var(--surface)
+    }
+
+    .alert-box {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: var(--r);
+      margin-bottom: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      background: var(--red-bg);
+      border: 1.5px solid rgba(217, 64, 64, 0.15);
+      color: var(--red);
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="main" id="main">
+    <div class="ptop">
+      <div>
+        <h1 class="ptitle">Patient Registration</h1>
+        <p class="psubtitle">Register and manage patients across all camps</p>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('create', null, this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        <span>Create New Patient</span>
+      </button>
+    </div>
+    <div class="card">
+      <div class="ch">
+        <div class="ch-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg></div><span class="ch-title">Search &amp; Filter</span>
+      </div>
+      <div class="cb">
+        <div class="fg fg-3" style="margin-bottom:16px">
+          <div class="field"><label>First Name</label><input type="text" id="f-fn" placeholder="First name"
+              oninput="this.value = this.value.replace(/[^a-zA-Z\s\-']/g, c => c.toUpperCase())"></div>
+          <div class="field"><label>Last Name</label><input type="text" id="f-ln" placeholder="Last name"
+              oninput="this.value = this.value.replace(/[^a-zA-Z\s\-']/g, c => c.toUpperCase())"></div>
+          <div class="field"><label>Camp</label>
+            <select id="f-camp">
+              <option value="">All Camps</option>
+            </select>
+          </div>
+        </div>
+        <div class="fa">
+          <button class="btn btn-navy" onclick="applyF()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>Search</button>
+          <button class="btn btn-ghost" onclick="clearF()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>Clear</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="tw">
+        <table>
+          <thead>
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Date of Birth</th>
+              <th>Age</th>
+              <th>City</th>
+              <th>Camp</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div class="tft">
+        <div class="pag" id="pag"></div>
+        <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+          <div class="shw">Show<select id="pgsz" onchange="goPage(1)">
+              <option value="5">5</option>
+              <option value="10" selected>10</option>
+              <option value="15">15</option>
+            </select>items</div>
+          <span class="pgtext" id="pginfo"></span>
+          <button class="pgb" onclick="loadPage(currentPage)" title="Refresh"><svg width="13" height="13"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+              <polyline points="23 4 23 10 17 10" />
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+            </svg></button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="overlay" id="pmod">
+    <div class="modal">
+      <div class="mhdr">
+        <div class="mhl">
+          <div class="mico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg></div>
+          <div>
+            <div class="mtitle" id="mtitle">Create New Patient</div>
+            <div class="msub" id="msub">Fill in the details below</div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <button id="btn-start-ai" class="btn-ai-tog" onclick="VoiceAssistant.start()" style="display:none;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="22"></line>
+            </svg>
+            Voice Assistant
+          </button>
+          <button class="mcls" onclick="closeM('pmod')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg></button>
+        </div>
+      </div>
+      <div class="mbody" id="mbody">
+
+        <div class="ai-panel" id="ai-panel">
+          <div class="ai-ico">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="22"></line>
+            </svg>
+          </div>
+          <div class="ai-text">
+            <div class="ai-status" id="ai-status">Initializing Whisper AI...</div>
+            <div class="ai-prompt" id="ai-prompt">Please wait...</div>
+          </div>
+          <button class="btn btn-ghost" style="padding: 6px 12px; font-size: 11.5px;"
+            onclick="VoiceAssistant.stop()">Stop</button>
+        </div>
+
+        <div class="alert-box" id="m-err">
+          <span class="alert-icon">⚠️</span>
+          <span id="m-err-msg"></span>
+        </div>
+
+        <input type="hidden" id="mid">
+        <div class="mg">
+          <div class="fd"><span class="fdl">Personal Information</span><span class="fdln"></span></div>
+          <div class="field"><label>First Name </label><input type="text" id="mfn" placeholder="First name"
+              oninput="this.value = this.value.replace(/[^a-zA-Z\s\-']/g, c => c.toUpperCase())"></div>
+          <div class="field"><label>Last Name </label><input type="text" id="mln" placeholder="Last name"
+              oninput="this.value = this.value.replace(/[^a-zA-Z\s\-']/g, c => c.toUpperCase())"></div>
+          <div class="field"><label>Date of Birth </label><input type="date" id="mdob" onchange="calcAge()"></div>
+          <div class="field"><label>Age</label><input type="number" id="mage" placeholder="Auto-calculated" min="0"
+              disabled></div>
+          <div class="field" id="wrap-mgen"><label>Gender</label>
+            <select id="mgen">
+              <option value="">Select gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+              <option value="Prefer not to say">Prefer not to say</option>
+            </select>
+          </div>
+          <div class="field" id="wrap-mcamp"><label>Camp</label>
+            <select id="mcamp" onchange="onCampChange()">
+              <option value="">Select camp</option>
+            </select>
+          </div>
+
+          <div class="fd s2"><span class="fdl">Contact</span><span class="fdln"></span></div>
+
+          <div class="field" id="wrap-mph"><label>Phone Number</label>
+            <div class="ph-wrap">
+              <select id="mphcc" class="ph-cc" onchange="onPhoneCodeChange()">
+                <option value="+1">&#127482;&#127480; +1</option>
+                <option value="+91">&#127470;&#127475; +91</option>
+              </select>
+              <input type="tel" id="mph" class="ph-inp" placeholder="(555) 000-0000" oninput="formatPhone(this)">
+            </div>
+          </div>
+
+          <div class="fd s2"><span class="fdl">Address</span><span class="fdln"></span></div>
+          <div class="field s2" id="wrap-madr"><label>Street Address</label><input type="text" id="madr"
+              placeholder="Street address"></div>
+
+          <div class="field" id="wrap-mzp">
+            <label>Zip Code / Pincode</label>
+            <div class="zip-wrap">
+              <input type="text" id="mzp" placeholder="Search Zip Code..." oninput="onZipSearch(this)"
+                onblur="onZipBlur()" autocomplete="off" style="padding-right:32px">
+              <div id="zip-dropdown" class="zip-dropdown"></div>
+              <svg class="zip-spin" id="zip-spin" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                stroke="var(--teal)" stroke-width="2" stroke-linecap="round">
+                <path d="M21 12a9 9 0 1 1-6.22-8.56" />
+              </svg>
+            </div>
+          </div>
+
+          <div class="field"><label>Country</label>
+            <select id="mcountry">
+              <option value="">Auto-populated via Zip</option>
+            </select>
+          </div>
+          <div class="field"><label>State / Province</label>
+            <select id="mstate">
+              <option value="">Auto-populated via Zip</option>
+            </select>
+          </div>
+          <div class="field"><label>City</label>
+            <select id="mcity">
+              <option value="">Auto-populated via Zip</option>
+            </select>
+          </div>
+
+          <div class="field s2" id="wrap-photo">
+            <label>Patient Photo</label>
+            <div class="phu" id="phu">
+
+              <div id="photo-unloaded-state"
+                style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
+                <div class="phu-options"
+                  style="display: flex; justify-content: center; gap: 24px; padding: 10px 0; width: 100%; flex-wrap: wrap;">
+                  <button type="button" class="btn btn-ghost photo-opt-btn" onclick="startCamera(event)"
+                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: auto; padding: 14px 20px; gap: 8px; border-radius: 8px; min-width: 130px; border: 1.5px solid var(--border);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z">
+                      </path>
+                      <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                    <span style="font-size: 13px; font-weight: 600; color: var(--text);">Take Photo</span>
+                  </button>
+
+                  <button type="button" class="btn btn-ghost photo-opt-btn" onclick="triggerFileUpload(event)"
+                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: auto; padding: 14px 20px; gap: 8px; border-radius: 8px; min-width: 130px; border: 1.5px solid var(--border);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="17 8 12 3 7 8"></polyline>
+                      <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <span style="font-size: 13px; font-weight: 600; color: var(--text);">Upload Photo</span>
+                  </button>
+                </div>
+                <div style="font-size: 11.5px; color: var(--text-3); margin-top: 8px;">JPG, PNG</div>
+              </div>
+
+              <div id="photo-camera-state"
+                style="display: none; flex-direction: column; align-items: center; gap: 12px; width: 100%;">
+                <div class="video-container"
+                  style="position: relative; width: 100%; max-width: 240px; aspect-ratio: 4/3; border-radius: 6px; overflow: hidden; background: #000; border: 1.5px solid var(--border);">
+                  <video id="camera-stream" autoplay playsinline
+                    style="width: 100%; height: 100%; object-fit: cover;"></video>
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                  <button type="button" class="btn btn-primary" onclick="capturePhoto(event)"
+                    style="height: auto; padding: 8px 16px;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                      style="margin-right: 4px;">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    Capture
+                  </button>
+                  <button type="button" class="btn btn-ghost" onclick="switchCamera(event)"
+                    style="height: auto; padding: 8px 16px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                      stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+                      <polyline points="1 4 1 10 7 10"></polyline>
+                      <polyline points="23 20 23 14 17 14"></polyline>
+                      <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10"></path>
+                      <path d="M3.51 15A9 9 0 0 0 18.36 18.36L23 14"></path>
+                    </svg>
+                    Switch
+                  </button>
+                  <button type="button" class="btn btn-ghost" onclick="stopCamera(event)"
+                    style="height: auto; padding: 8px 16px;">Cancel</button>
+                </div>
+              </div>
+
+              <div id="photo-loading-state"
+                style="display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; gap: 8px; width: 100%;">
+                <svg class="spin" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--teal)"
+                  stroke-width="2.5" stroke-linecap="round">
+                  <line x1="12" y1="2" x2="12" y2="6"></line>
+                  <line x1="12" y1="18" x2="12" y2="22"></line>
+                  <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                  <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                  <line x1="2" y1="12" x2="6" y2="12"></line>
+                  <line x1="18" y1="12" x2="22" y2="12"></line>
+                  <line x1="6.34" y1="17.66" x2="9.17" y2="14.83"></line>
+                  <line x1="14.83" y1="9.17" x2="17.66" y2="6.34"></line>
+                </svg>
+                <div style="font-weight: 600; color: var(--text-2); font-size: 13px;" id="photo-loading-text">Processing
+                  image...</div>
+              </div>
+
+              <div id="photo-preview-state"
+                style="display: none; flex-direction: column; align-items: center; gap: 12px; width: 100%;">
+                <div id="photo-img-wrap"
+                  style="position: relative; display: inline-block; width: 120px; height: 120px; border-radius: 6px; overflow: hidden; border: 1.5px solid var(--border-2); box-shadow: var(--sh); transition: transform 0.2s;">
+                  <img id="photo-prev" src="" alt="Photo preview"
+                    style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                </div>
+                <div id="photo-view-msg"
+                  style="font-size: 11.5px; color: var(--text-3); font-weight: 600; display: none;">Click image to
+                  enlarge and download</div>
+                <div style="display: flex; gap: 10px;" id="photo-actions-wrap">
+                  <button type="button" id="btn-remove-photo" class="btn btn-ghost btn-danger"
+                    onclick="clearPhoto(event)"
+                    style="padding: 6px 12px; font-size: 12px; height: auto; display: flex; align-items: center; gap: 4px;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="3 6 5 6 21 6" />
+                      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                    </svg>
+                    Remove Photo
+                  </button>
+                </div>
+              </div>
+
+              <input type="file" id="photo-inp" accept="image/png, image/jpeg, image/jpg" onchange="prevPhoto(event)">
+            </div>
+          </div>
+
+          <div class="fd s2"><span class="fdl">Medical Questionnaire</span><span class="fdln"></span></div>
+          <div class="s2">
+            <div class="chkg" id="chkg">
+              <label class="chki" id="wrap-chk1"><input type="checkbox" id="chk1"><span>Blurred vision, frequent
+                  headaches, eye strain, or persistent eye dryness</span></label>
+              <label class="chki" id="wrap-chk2"><input type="checkbox" id="chk2"><span>Difficulty seeing objects near
+                  or far</span></label>
+              <label class="chki" id="wrap-chk3"><input type="checkbox" id="chk3"><span>Double vision or sensitivity to
+                  bright light</span></label>
+              <label class="chki" id="wrap-chk4"><input type="checkbox" id="chk4"><span>Currently wearing glasses or
+                  contact lenses</span></label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="mfoot">
+        <button class="btn btn-ghost" id="btn-back" onclick="closeM('pmod')" style="display:none">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>Back
+        </button>
+        <button class="btn btn-ghost" id="btn-cancel" onclick="closeM('pmod')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>Cancel
+        </button>
+        <button class="btn btn-primary" id="btn-save" onclick="savePat()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+            <polyline points="17 21 17 13 7 13 7 21" />
+            <polyline points="7 3 7 8 15 8" />
+          </svg>
+          <span id="save-lbl">Create Patient</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="dmod">
+    <div class="modal msm">
+      <div class="mhdr">
+        <div class="mhl">
+          <div class="mico" style="background:rgba(217,64,64,.2);color:var(--red)"><svg width="16" height="16"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <polyline points="3 6 5 6 21 6" />
+              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+            </svg></div>
+          <div class="mtitle">Confirm Deletion</div>
+        </div>
+        <button class="mcls" onclick="closeM('dmod')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg></button>
+      </div>
+      <div class="cc">
+        <div class="ciw"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round">
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+            <path d="M10 11v6" />
+            <path d="M14 11v6" />
+            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+          </svg></div>
+        <h3>Delete Patient?</h3>
+        <p id="dmsg">Are you sure you want to delete this patient? This action cannot be undone.</p>
+      </div>
+      <div class="cft">
+        <button class="btn btn-ghost" onclick="closeM('dmod')">No, Cancel</button>
+        <button class="btn btn-danger" id="btn-del-confirm" onclick="confirmDel(this)"><svg width="13" height="13"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+          </svg>Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ─── UTILS & CONSTANTS ────────────────────────────────────────────
+    const btnSpinner = `<svg class="spin" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.22-8.56"/></svg>`;
+
+    function getFriendlyErrorMsg(errStr) {
+      const str = errStr.toLowerCase();
+      if (str.includes("failed to fetch") || str.includes("networkerror")) return "Unable to connect to the server. Please check your internet connection.";
+      if (str.includes("unauthorized") || str.includes("token")) return "Your session has expired. Please log in again.";
+      if (str.includes("duplicate") || str.includes("already exists")) return "A record with this information already exists in the system.";
+      return errStr.length < 100 ? errStr : "An unexpected problem occurred while processing your request. Please try again.";
+    }
+
+    function fmtDOB(d) {
+      if (!d) return '—';
+      const date = new Date(d);
+      if (isNaN(date)) return d;
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
+    window.viewFullImage = function (b64) {
+      if (!b64) return;
+      const win = window.open();
+      win.document.write(`
+        <html>
+        <head><title>Patient Photo</title></head>
+        <body style="margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0e2340;height:100vh;">
+            <img src="${b64}" style="max-width:90%;max-height:85vh;box-shadow:0 8px 40px rgba(0,0,0,0.5);border-radius:8px;">
+            <a href="${b64}" download="Patient_Photo.jpg" style="margin-top:20px;padding:10px 20px;background:#f5a623;color:#0e2340;text-decoration:none;font-family:sans-serif;font-weight:bold;border-radius:6px;cursor:pointer;">Download Image</a>
+        </body>
+        </html>
+    `);
+    };
+
+    // ─── STATE ────────────────────────────────────────────────────────
+    let currentPage = 1;
+    let currentFilters = { fn: '', ln: '', camp: '' };
+    let lastTotal = 0;
+    let currentValidZip = '';
+    let availableCamps = [];
+    const g = id => document.getElementById(id);
+
+    // ─── PHONE FORMATTING ───────────────────────────────────
+    function formatPhone(input) {
+      const code = g('mphcc').value;
+      let x = input.value.replace(/\D/g, '').substring(0, 10);
+
+      if (code === '+1') {
+        x = x.match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+        if (!x) { input.value = ''; return; }
+        input.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+      } else if (code === '+91') {
+        x = x.match(/(\d{0,5})(\d{0,5})/);
+        if (!x) { input.value = ''; return; }
+        input.value = !x[2] ? x[1] : x[1] + ' ' + x[2];
+      }
+    }
+
+    function onPhoneCodeChange() {
+      g('mph').value = '';
+      g('mph').focus();
+    }
+
+    // ─── CUSTOM ZIP CODE AUTOCOMPLETE ─────────────────────────────────
+    let searchTimer = null;
+    async function onZipSearch(input) {
+      const val = input.value.trim();
+      const dd = g('zip-dropdown');
+
+      if (val.length < 2) {
+        dd.classList.remove('open');
+        return;
+      }
+
+      clearTimeout(searchTimer);
+      g('zip-spin').classList.add('on');
+
+      searchTimer = setTimeout(async () => {
+        try {
+          const res = await fetch(`${API_BASE}/zip-search?q=${val}`);
+          const json = await res.json();
+          g('zip-spin').classList.remove('on');
+
+          if (json.data && json.data.length > 0) {
+            dd.innerHTML = json.data.map(item => `
+          <div class="zip-item" onmousedown="selectZip('${item.zip_code}', ${item.city_id}, '${item.city_name}', ${item.state_id}, '${item.state_name}', ${item.country_id}, '${item.country_name}')">
+            <strong>${item.zip_code}</strong>
+            <span>${item.city_name}, ${item.state_name}</span>
+          </div>
+        `).join('');
+            dd.classList.add('open');
+          } else {
+            dd.innerHTML = `<div class="zip-item"><span>No matching locations found.</span></div>`;
+            dd.classList.add('open');
+          }
+        } catch (e) {
+          g('zip-spin').classList.remove('on');
+        }
+      }, 300);
+    }
+
+    function selectZip(zip, cId, cName, sId, sName, coId, coName) {
+      currentValidZip = zip;
+      g('mzp').value = zip;
+      g('mcity').innerHTML = `<option value="${cId}">${cName}</option>`;
+      g('mstate').innerHTML = `<option value="${sId}">${sName}</option>`;
+      g('mcountry').innerHTML = `<option value="${coId}">${coName}</option>`;
+      g('zip-dropdown').classList.remove('open');
+
+      ['mzp', 'mcity', 'mstate', 'mcountry'].forEach(id => g(id).classList.remove('err'));
+    }
+
+    function onZipBlur() {
+      setTimeout(() => {
+        const zipInput = g('mzp');
+        if (zipInput.value.trim() !== currentValidZip) {
+          zipInput.value = '';
+          currentValidZip = '';
+          g('mcity').innerHTML = '<option value="">Auto-populated via Zip</option>';
+          g('mstate').innerHTML = '<option value="">Auto-populated via Zip</option>';
+          g('mcountry').innerHTML = '<option value="">Auto-populated via Zip</option>';
+        }
+        const dd = g('zip-dropdown');
+        if (dd) dd.classList.remove('open');
+      }, 200);
+    }
+
+    async function populateGeography(zipCode) {
+      try {
+        const res = await fetch(`${API_BASE}/zip-search?q=${zipCode}`);
+        const json = await res.json();
+
+        if (json.data && json.data.length > 0) {
+          // CRITICAL FIX: Convert both to strings to prevent "12345" === 12345 silent failures!
+          const item = json.data.find(x => String(x.zip_code) === String(zipCode)) || json.data[0];
+
+          // Automatically maps and locks in City, State, and Country drop-downs
+          selectZip(item.zip_code, item.city_id, item.city_name, item.state_id, item.state_name, item.country_id, item.country_name);
+        }
+      } catch (e) {
+        console.error("Failed to load geo details", e);
+      }
+    }
+
+    // ─── DROPDOWNS LOADING ────────────────────────────────────────────
+    async function loadCampsDropdowns() {
+      const fCamp = g('f-camp');
+      const mCamp = g('mcamp');
+      fCamp.innerHTML = '<option value="">Loading camps...</option>';
+      mCamp.innerHTML = '<option value="">Loading camps...</option>';
+
+      try {
+        const res = await fetch(`${API_BASE}/lookups/camps`);
+        if (!res.ok) throw new Error();
+        const json = await res.json();
+
+        availableCamps = json.data;
+
+        fCamp.innerHTML = '<option value="">All Camps</option>';
+        mCamp.innerHTML = '<option value="">Select camp</option>';
+        availableCamps.forEach(c => {
+          fCamp.innerHTML += `<option value="${c.id}">${c.name || c.camp_name}</option>`;
+          mCamp.innerHTML += `<option value="${c.id}">${c.name || c.camp_name}</option>`;
+        });
+      } catch (e) {
+        fCamp.innerHTML = '<option value="">All Camps</option>';
+        mCamp.innerHTML = '<option value="">Select camp</option>';
+      }
+    }
+
+    async function onCampChange() {
+      const campId = g('mcamp').value;
+
+      // If the user unselects the camp, clear out the address fields
+      if (!campId) {
+        g('madr').value = '';
+        g('mzp').value = '';
+        currentValidZip = '';
+        g('mcity').innerHTML = '<option value="">Auto-populated via Zip</option>';
+        g('mstate').innerHTML = '<option value="">Auto-populated via Zip</option>';
+        g('mcountry').innerHTML = '<option value="">Auto-populated via Zip</option>';
+        return;
+      }
+
+      // Ensure type-safe matching for the camp ID
+      const selectedCamp = availableCamps.find(c => String(c.id) === String(campId));
+
+      if (selectedCamp) {
+        // 1. Populate Street Address (Remains editable)
+        g('madr').value = selectedCamp.street_address || '';
+
+        // 2. Populate Zip and Trigger the Auto-select
+        if (selectedCamp.zip_code) {
+          g('mzp').value = selectedCamp.zip_code;
+          g('zip-spin').classList.add('on'); // Show loading spinner so UI feels alive
+
+          // Force the geography lookup
+          await populateGeography(selectedCamp.zip_code);
+
+          g('zip-spin').classList.remove('on'); // Hide spinner
+        } else {
+          // If this specific camp has no zip, clear the geo fields so user can enter manually
+          g('mzp').value = '';
+          currentValidZip = '';
+          g('mcity').innerHTML = '<option value="">Auto-populated via Zip</option>';
+          g('mstate').innerHTML = '<option value="">Auto-populated via Zip</option>';
+          g('mcountry').innerHTML = '<option value="">Auto-populated via Zip</option>';
+        }
+      }
+    }
+
+    // ─── PAGINATED REST API CALL ──────────────────────────────────────
+    async function apiGetPatients({ page, pageSize, fn, ln, camp }) {
+      const offset = (page - 1) * pageSize;
+      const url = new URL(`${API_BASE}/patients`);
+      url.searchParams.append('limit', pageSize);
+      url.searchParams.append('offset', offset);
+      if (fn) url.searchParams.append('first_name', fn);
+      if (ln) url.searchParams.append('last_name', ln);
+      if (camp) url.searchParams.append('camp_id', camp);
+
+      const res = await fetch(url);
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || 'Failed to fetch patients');
+      return {
+        data: json.data.patients,
+        total: json.data.pagination.total,
+        page,
+        pageSize
+      };
+    }
+
+    // ─── FILTERS ──────────────────────────────────────────────────────
+    function applyF() {
+      currentFilters = {
+        fn: g('f-fn').value.trim(),
+        ln: g('f-ln').value.trim(),
+        camp: g('f-camp').value
+      };
+      goPage(1);
+    }
+    function clearF() {
+      g('f-fn').value = ''; g('f-ln').value = ''; g('f-camp').value = '';
+      currentFilters = { fn: '', ln: '', camp: '' };
+      goPage(1);
+    }
+    function goPage(p) { currentPage = p; loadPage(p); }
+
+    // ─── LOAD PAGE FROM API ───────────────────────────────────────────
+    async function loadPage(page) {
+      const pageSize = parseInt(g('pgsz').value);
+      const tb = g('tbody');
+      tb.innerHTML = `<tr><td colspan="7" class="td-empty" style="padding:30px!important">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" style="display:block;margin:0 auto 8px;animation:spin .7s linear infinite"><path d="M21 12a9 9 0 1 1-6.22-8.56"/></svg>
+    Loading patients&hellip;</td></tr>`;
+
+      try {
+        const result = await apiGetPatients({ page, pageSize, ...currentFilters });
+        lastTotal = result.total;
+        renderTable(result.data);
+        renderPagination(page, pageSize, result.total);
+        const s = (page - 1) * pageSize + 1;
+        const e = Math.min(page * pageSize, result.total);
+        g('pginfo').textContent = result.total
+          ? `${s}–${e} of ${result.total} patient${result.total !== 1 ? 's' : ''}`
+          : 'No results';
+      } catch (err) {
+        tb.innerHTML = `<tr><td colspan="7" class="td-empty" style="color:var(--red)">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:block;margin:0 auto 8px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Error: ${err.message}</td></tr>`;
+        g('pginfo').textContent = 'Error';
+      }
+    }
+
+    // ─── RENDER TABLE ─────────────────────────────────────────────────
+    function renderTable(rows) {
+      const tb = g('tbody');
+      tb.innerHTML = '';
+      if (!rows || !rows.length) {
+        tb.innerHTML = `<tr><td colspan="7" class="td-empty">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="display:block;margin:0 auto 10px;color:var(--border)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      No patients match the current filters.</td></tr>`; return;
+      }
+      rows.forEach(p => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+      <td><strong>${p.first_name}</strong></td><td><strong>${p.last_name}</strong></td>
+      <td style="color:var(--text-3)">${fmtDOB(p.dob)}</td>
+      <td>${p.age ?? 0}</td><td>${p.city_name || '—'}</td>
+      <td><span style="background:var(--bg);border:1.5px solid var(--border-2);border-radius:20px;padding:3px 10px;font-size:11.5px;font-weight:600;color:var(--text-2)">${p.camp_name || '—'}</span></td>
+      <td><div class="ag">
+        <button class="act av" onclick="openModal('view','${p.id}', this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View</button>
+        <button class="act ae" onclick="openModal('edit','${p.id}', this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Update</button>
+        <button class="act ad" onclick="openDel('${p.id}', this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>Delete</button>
+      </div></td>`;
+        tb.appendChild(tr);
+      });
+    }
+
+    // ─── RENDER PAGINATION ────────────────────────────────────────────
+    function renderPagination(page, pageSize, total) {
+      const tp = Math.ceil(total / pageSize) || 1;
+      const pag = g('pag');
+      pag.innerHTML = '';
+      const mk = (lbl, p, dis, act) => {
+        const b = document.createElement('button');
+        b.className = 'pgb' + (act ? ' active' : '');
+        b.innerHTML = lbl; b.disabled = dis;
+        b.onclick = () => goPage(p);
+        return b;
+      };
+      pag.appendChild(mk('&#8249; Prev', page - 1, page === 1, false));
+      let pages = [];
+      if (tp <= 7) { for (let i = 1; i <= tp; i++) pages.push(i); }
+      else {
+        pages = [1];
+        if (page > 3) pages.push('...');
+        for (let i = Math.max(2, page - 1); i <= Math.min(tp - 1, page + 1); i++) pages.push(i);
+        if (page < tp - 2) pages.push('...');
+        pages.push(tp);
+      }
+      pages.forEach(p => {
+        if (p === '...') {
+          const s = document.createElement('span');
+          s.textContent = '…'; s.style.cssText = 'padding:0 4px;color:var(--text-3);font-size:13px;align-self:center';
+          pag.appendChild(s);
+        } else pag.appendChild(mk(p, p, false, p === page));
+      });
+      pag.appendChild(mk('Next &#8250;', page + 1, page >= tp, false));
+    }
+
+    // ─── PHOTO UPLOAD & LIVE CAMERA LOGIC ─────────────────────────────
+    let fileToUpload = null;
+    let photoBase64 = null;
+    let cameraStream = null;
+
+    function setPhotoState(state) {
+      const states = ['unloaded', 'camera', 'loading', 'preview'];
+      states.forEach(s => {
+        const el = g(`photo-${s}-state`);
+        if (el) {
+          el.style.display = (s === state) ? 'flex' : 'none';
+        }
+      });
+
+      const phu = g('phu');
+      if (phu) {
+        if (state === 'preview') {
+          phu.classList.add('loaded');
+        } else {
+          phu.classList.remove('loaded');
+        }
+      }
+    }
+
+    function triggerFileUpload(e) {
+      if (e) e.preventDefault();
+      g('photo-inp').click();
+    }
+
+    let currentFacingMode = 'user';
+
+    async function startCamera(e, mode = 'user') {
+      if (e) e.preventDefault();
+      g('m-err').style.display = 'none';
+      g('phu').classList.remove('err');
+      currentFacingMode = mode;
+
+      try {
+        setPhotoState('loading');
+        g('photo-loading-text').textContent = 'Accessing camera...';
+
+        // Stop existing stream if we are switching
+        if (cameraStream) {
+          cameraStream.getTracks().forEach(track => track.stop());
+        }
+
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: currentFacingMode }, width: { ideal: 640 }, height: { ideal: 480 } }
+        });
+
+        cameraStream = stream;
+        const video = g('camera-stream');
+        video.srcObject = stream;
+
+        // Dynamically mirror the video preview ONLY if using the front camera
+        if (currentFacingMode === 'user') {
+          video.style.transform = 'scaleX(-1)';
+        } else {
+          video.style.transform = 'scaleX(1)';
+        }
+
+        setPhotoState('camera');
+      } catch (err) {
+        let errMsg = "Could not access camera. Please check camera connections and permissions.";
+        g('m-err-msg').textContent = errMsg;
+        g('m-err').style.display = 'flex';
+        g('phu').classList.add('err');
+        resetPhoto();
+      }
+    }
+
+    function stopCamera(e) {
+      if (e) e.preventDefault();
+      if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+      }
+      resetPhoto();
+    }
+
+    function switchCamera(e) {
+      if (e) e.preventDefault();
+      const newMode = currentFacingMode === 'user' ? 'environment' : 'user';
+      startCamera(null, newMode);
+    }
+
+    function capturePhoto(e) {
+      if (e) e.preventDefault();
+      if (!cameraStream) return;
+
+      setPhotoState('loading');
+      g('photo-loading-text').textContent = 'Capturing photo...';
+
+      try {
+        const video = g('camera-stream');
+        const canvas = document.createElement('canvas');
+        const width = video.videoWidth || 640;
+        const height = video.videoHeight || 480;
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+
+        // Dynamically mirror the canvas capture ONLY if using the front camera
+        if (currentFacingMode === 'user') {
+          ctx.translate(width, 0);
+          ctx.scale(-1, 1);
+        }
+
+        ctx.drawImage(video, 0, 0, width, height);
+
+        photoBase64 = canvas.toDataURL('image/jpeg', 0.35);
+
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+
+        g('photo-prev').src = photoBase64;
+        setPhotoState('preview');
+        g('phu').classList.remove('err');
+      } catch (err) {
+        g('m-err-msg').textContent = "Failed to capture photo from camera stream.";
+        g('m-err').style.display = 'flex';
+        g('phu').classList.add('err');
+        if (cameraStream) {
+          cameraStream.getTracks().forEach(track => track.stop());
+          cameraStream = null;
+        }
+        resetPhoto();
+      }
+    }
+
+    function clearPhoto(e) {
+      if (e) e.preventDefault();
+      resetPhoto();
+    }
+
+    function prevPhoto(e) {
+      const f = e.target.files[0];
+      if (!f) return;
+
+      g('m-err').style.display = 'none';
+      g('phu').classList.remove('err');
+
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+      if (!validTypes.includes(f.type)) {
+        g('m-err-msg').textContent = "Invalid file format. Only JPG, JPEG, and PNG images are allowed.";
+        g('m-err').style.display = 'flex';
+        g('phu').classList.add('err');
+        resetPhoto();
+        return;
+      }
+
+      fileToUpload = f;
+      setPhotoState('loading');
+      g('photo-loading-text').textContent = 'Processing image...';
+
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        const img = new Image();
+        img.onload = function () {
+          try {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            const MAX_WIDTH = 800;
+            const MAX_HEIGHT = 800;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+              if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+            } else {
+              if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+
+            photoBase64 = canvas.toDataURL('image/jpeg', 0.35);
+
+            g('photo-prev').src = photoBase64;
+            setPhotoState('preview');
+            g('phu').classList.remove('err');
+          } catch (err) {
+            g('m-err-msg').textContent = "Failed to process the uploaded image.";
+            g('m-err').style.display = 'flex';
+            g('phu').classList.add('err');
+            resetPhoto();
+          }
+        };
+        img.onerror = function () {
+          g('m-err-msg').textContent = "Failed to load the selected image file.";
+          g('m-err').style.display = 'flex';
+          g('phu').classList.add('err');
+          resetPhoto();
+        };
+        img.src = event.target.result;
+      };
+      reader.onerror = function () {
+        g('m-err-msg').textContent = "Failed to read the selected image file.";
+        g('m-err').style.display = 'flex';
+        g('phu').classList.add('err');
+        resetPhoto();
+      };
+      reader.readAsDataURL(f);
+    }
+
+    function resetPhoto() {
+      fileToUpload = null;
+      photoBase64 = null;
+      g('photo-prev').src = '';
+      g('photo-inp').value = '';
+      setPhotoState('unloaded');
+    }
+
+    // ─── AGE CALC ─────────────────────────────────────────────────────
+    function calcAge() {
+      const dob = g('mdob').value; if (!dob) { g('mage').value = ''; return; }
+      const t = new Date(), b = new Date(dob);
+      let a = t.getFullYear() - b.getFullYear();
+      if (t.getMonth() < b.getMonth() || (t.getMonth() === b.getMonth() && t.getDate() < b.getDate())) a--;
+      g('mage').value = a < 0 ? 0 : a;
+    }
+
+    function isValidDate(dateString) {
+      if (!dateString) return false;
+      const parts = dateString.split('-');
+      if (parts.length !== 3) return false;
+      const year = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10);
+      const day = parseInt(parts[2], 10);
+      const date = new Date(year, month - 1, day);
+      return (date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day);
+    }
+
+    // ─── VOICE ASSISTANT (Whisper Simulated Logic via Web Speech) ────
+    const VoiceAssistant = {
+      active: false,
+      stepIdx: 0,
+      recognition: null,
+      synth: window.speechSynthesis,
+
+      steps: [
+        { id: 'mfn', wrap: 'wrap-mfn', prompt: "What is the patient's first name? Say skip to leave blank." },
+        { id: 'mln', wrap: 'wrap-mln', prompt: "What is their last name?" },
+        { id: 'mdob', wrap: 'wrap-mdob', prompt: "What is their date of birth? Say the year, month, and day, or skip." },
+        { id: 'mgen', wrap: 'wrap-mgen', prompt: "What is their gender? Say Male, Female, Other, or skip." },
+        { id: 'mcamp', wrap: 'wrap-mcamp', prompt: "Which camp are they attending?" },
+        { id: 'mphcc', wrap: 'wrap-mph', prompt: "Is their phone country code +1 for the US, or +91 for India?" },
+        { id: 'mph', wrap: 'wrap-mph', prompt: "What is their phone number?" },
+        { id: 'madr', wrap: 'wrap-madr', prompt: "What is their street address?" },
+        { id: 'mzp', wrap: 'wrap-mzp', prompt: "What is their zip code or pincode? We will auto-populate the city and state." },
+        { id: 'photo', wrap: 'wrap-photo', prompt: "Would you like to take a photo? Say capture to open the camera, or skip." },
+        { id: 'chk1', wrap: 'wrap-chk1', prompt: "Does the patient have blurred vision, frequent headaches, or eye strain? Say yes or no." },
+        { id: 'chk2', wrap: 'wrap-chk2', prompt: "Do they have difficulty seeing objects near or far?" },
+        { id: 'chk3', wrap: 'wrap-chk3', prompt: "Do they have double vision or sensitivity to bright light?" },
+        { id: 'chk4', wrap: 'wrap-chk4', prompt: "Are they currently wearing glasses or contact lenses?" }
+      ],
+
+      init() {
+        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRec) {
+          this.recognition = new SpeechRec();
+          this.recognition.continuous = false;
+          this.recognition.interimResults = false;
+          this.recognition.lang = 'en-US';
+
+          this.recognition.onresult = (e) => this.handleResult(e.results[0][0].transcript);
+          this.recognition.onerror = (e) => this.handleError(e);
+          this.recognition.onend = () => { if (this.active) setTimeout(() => { if (this.active && !this.synth.speaking) this.recognition.start(); }, 300); };
+        }
+      },
+
+      start() {
+        if (!this.recognition) this.init();
+        if (!this.recognition) { alert("Your browser doesn't support the Voice Assistant feature."); return; }
+
+        this.active = true;
+        this.stepIdx = 0;
+        g('ai-panel').classList.add('active');
+        g('btn-save').classList.remove('highlight-save');
+        this.processStep();
+      },
+
+      stop() {
+        this.active = false;
+        this.synth.cancel();
+        if (this.recognition) this.recognition.stop();
+        g('ai-panel').classList.remove('active', 'listening');
+        document.querySelectorAll('.ai-active').forEach(el => el.classList.remove('ai-active'));
+      },
+
+      processStep() {
+        document.querySelectorAll('.ai-active').forEach(el => el.classList.remove('ai-active'));
+
+        if (this.stepIdx >= this.steps.length) {
+          this.finish();
+          return;
+        }
+
+        const step = this.steps[this.stepIdx];
+        g('ai-status').textContent = "Speaking...";
+        g('ai-prompt').textContent = step.prompt;
+        g('ai-panel').classList.remove('listening');
+
+        const wrap = g(step.wrap);
+        if (wrap) {
+          wrap.classList.add('ai-active');
+          wrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        const utterance = new SpeechSynthesisUtterance(step.prompt);
+        utterance.onend = () => {
+          if (!this.active) return;
+          g('ai-status').textContent = "Listening via Whisper API...";
+          g('ai-panel').classList.add('listening');
+          this.recognition.start();
+        };
+        this.synth.speak(utterance);
+      },
+
+      handleResult(transcript) {
+        if (!this.active) return;
+        this.recognition.stop();
+
+        const step = this.steps[this.stepIdx];
+        const t = transcript.toLowerCase().trim();
+        const isSkip = t.includes("skip") || t.includes("don't have it");
+
+        if (!isSkip) {
+          const el = g(step.id);
+
+          if (step.id === 'photo') {
+            if (t.includes("capture") || t.includes("take photo") || t.includes("yes")) {
+              startCamera(null).then(() => setTimeout(() => capturePhoto(null), 3000));
+            }
+          } else if (step.id.startsWith('chk')) {
+            if (t.includes("yes") || t.includes("true") || t.includes("yep")) {
+              g(step.id).checked = true;
+            }
+          } else if (step.id === 'mphcc') {
+            if (t.includes("91") || t.includes("india")) {
+              g('mphcc').value = "+91";
+              onPhoneCodeChange();
+            } else if (t.includes("1") || t.includes("us") || t.includes("united states") || t.includes("america")) {
+              g('mphcc').value = "+1";
+              onPhoneCodeChange();
+            }
+          } else if (step.id === 'mzp') {
+            const zipStr = transcript.replace(/[^a-zA-Z0-9]/g, '');
+            el.value = zipStr;
+            populateGeography(zipStr);
+          } else if (step.id === 'mdob') {
+            let parsed = new Date(transcript);
+            if (!isNaN(parsed)) g('mdob').value = parsed.toISOString().split('T')[0];
+            calcAge();
+          } else if (step.id === 'mph') {
+            el.value = transcript.replace(/\D/g, '').substring(0, 10);
+            formatPhone(el);
+          } else if (el && el.tagName === 'SELECT') {
+            for (let i = 0; i < el.options.length; i++) {
+              if (t.includes(el.options[i].text.toLowerCase())) {
+                el.value = el.options[i].value;
+                if (el.id === 'mcamp') onCampChange();
+                break;
+              }
+            }
+          } else if (el) {
+            el.value = transcript.replace(/(^\w|\s\w)/g, m => m.toUpperCase());
+          }
+        }
+
+        this.stepIdx++;
+        this.processStep();
+      },
+
+      handleError(e) {
+        if (e.error !== 'no-speech' && e.error !== 'aborted') {
+          g('ai-status').textContent = "Error listening. Skipping...";
+          this.stepIdx++;
+          setTimeout(() => this.processStep(), 1000);
+        }
+      },
+
+      finish() {
+        this.stop();
+        g('ai-panel').classList.add('active');
+        g('ai-status').textContent = "Finished";
+        const msg = "Thank you. Please verify the entry. If everything is okay, manually click on Save Changes.";
+        g('ai-prompt').textContent = msg;
+        g('btn-save').classList.add('highlight-save');
+
+        const utterance = new SpeechSynthesisUtterance(msg);
+        this.synth.speak(utterance);
+
+        setTimeout(() => { g('ai-panel').classList.remove('active'); }, 6000);
+      }
+    };
+
+
+    // ─── MODAL ────────────────────────────────────────────────────────
+    let mode = '', did = null;
+
+    async function openModal(m, id, btn = null) {
+      mode = m;
+      currentValidZip = '';
+
+      g('mbody').scrollTop = 0;
+
+      let origBtnHtml = '';
+      if (btn) {
+        origBtnHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = `${btnSpinner} Wait...`;
+      }
+
+      document.body.classList.add('busy');
+      document.body.style.overflow = 'hidden';
+
+      g('m-err').style.display = 'none';
+      VoiceAssistant.stop();
+      g('btn-save').classList.remove('highlight-save');
+
+      const setRO = ro => {
+        g('mbody').querySelectorAll('input:not([type=file]),select:not(#mphcc)').forEach(el => { el.readOnly = ro; el.disabled = ro; el.classList.remove('err'); });
+        g('chkg').querySelectorAll('input').forEach(c => { c.disabled = ro; });
+        g('chkg').querySelectorAll('.chki').forEach(c => c.classList.toggle('ro', ro));
+
+        // Handle Photo UI behavior based on View vs Edit/Create modes
+        const phu = g('phu');
+        const imgWrap = g('photo-img-wrap');
+
+        if (ro) {
+          // View Mode: Make clickable, show text, hide remove buttons
+          phu.style.pointerEvents = 'auto';
+          phu.style.opacity = '1';
+          imgWrap.style.cursor = 'pointer';
+          imgWrap.onclick = function () { if (photoBase64) viewFullImage(photoBase64); };
+          imgWrap.onmouseover = function () { this.style.transform = 'scale(1.02)'; };
+          imgWrap.onmouseout = function () { this.style.transform = 'scale(1)'; };
+          g('photo-view-msg').style.display = 'block';
+          g('photo-actions-wrap').style.display = 'none';
+          g('photo-unloaded-state').style.display = 'none';
+        } else {
+          // Edit/Create Mode: Disable click, hide text, show remove buttons
+          phu.style.pointerEvents = 'auto';
+          phu.style.opacity = '1';
+          imgWrap.style.cursor = 'default';
+          imgWrap.onclick = null;
+          imgWrap.onmouseover = null;
+          imgWrap.onmouseout = null;
+          imgWrap.style.transform = 'scale(1)';
+          g('photo-view-msg').style.display = 'none';
+          g('photo-actions-wrap').style.display = 'flex';
+          if (!photoBase64) g('photo-unloaded-state').style.display = 'flex';
+        }
+
+        g('mcountry').disabled = true;
+        g('mstate').disabled = true;
+        g('mcity').disabled = true;
+        g('mphcc').disabled = ro;
+        g('mage').disabled = true;
+
+        g('mbody').classList.toggle('ro', ro);
+      };
+
+      if (m === 'create') {
+        g('mtitle').textContent = 'Create New Patient'; g('msub').textContent = 'Fill in the details below';
+        g('save-lbl').textContent = 'Create Patient'; g('btn-save').style.display = '';
+        g('btn-cancel').style.display = ''; g('btn-back').style.display = 'none';
+        g('btn-start-ai').style.display = 'flex';
+        g('mid').value = '';
+        ['mfn', 'mln', 'mdob', 'mage', 'mph', 'madr', 'mzp'].forEach(id => g(id).value = '');
+        g('mgen').value = ''; g('mcamp').value = ''; g('mphcc').value = '+1';
+        g('mcountry').innerHTML = '<option value="">Auto-populated via Zip</option>';
+        g('mstate').innerHTML = '<option value="">Auto-populated via Zip</option>';
+        g('mcity').innerHTML = '<option value="">Auto-populated via Zip</option>';
+        ['chk1', 'chk2', 'chk3', 'chk4'].forEach(c => g(c).checked = false);
+
+        resetPhoto();
+        setRO(false);
+      } else {
+        g('mtitle').textContent = 'Loading...'; g('msub').textContent = '';
+        g('btn-start-ai').style.display = 'none';
+        setRO(true);
+
+        try {
+          const res = await fetch(`${API_BASE}/patients/${id}`);
+          const json = await res.json();
+          if (!res.ok) throw new Error(json.error || 'Failed to load patient');
+          const p = json.data;
+
+          g('mid').value = p.id;
+          g('mfn').value = p.first_name || '';
+          g('mln').value = p.last_name || '';
+
+          if (p.dob) {
+            const dObj = new Date(p.dob);
+            if (!isNaN(dObj)) {
+              const yy = dObj.getFullYear();
+              const mm = String(dObj.getMonth() + 1).padStart(2, '0');
+              const dd = String(dObj.getDate()).padStart(2, '0');
+              g('mdob').value = `${yy}-${mm}-${dd}`;
+            } else { g('mdob').value = ''; }
+          } else { g('mdob').value = ''; }
+          calcAge();
+
+          g('mgen').value = p.gender || '';
+          g('mcamp').value = p.camp_id || '';
+          g('madr').value = p.address_line || '';
+
+          let phoneVal = p.phone_number || '';
+          if (phoneVal.startsWith('+91')) {
+            g('mphcc').value = '+91'; g('mph').value = phoneVal.replace('+91', '').trim();
+          } else if (phoneVal.startsWith('+1')) {
+            g('mphcc').value = '+1'; g('mph').value = phoneVal.replace('+1', '').trim();
+          } else {
+            g('mphcc').value = '+1'; g('mph').value = phoneVal;
+          }
+
+          currentValidZip = p.zip_code || '';
+          g('mzp').value = currentValidZip;
+          if (p.zip_code) { await populateGeography(p.zip_code); }
+          else {
+            g('mcountry').innerHTML = '<option value="">Auto-populated via Zip</option>';
+            g('mstate').innerHTML = '<option value="">Auto-populated via Zip</option>';
+            g('mcity').innerHTML = '<option value="">Auto-populated via Zip</option>';
+          }
+
+          g('chk1').checked = (p.isblurredvision === 1 || p.IsBlurredVision === 1 || p.IsBlurredVision === true || p.isblurredvision === true);
+          g('chk2').checked = (p.isvisiondifficulty === 1 || p.IsVisionDifficulty === 1 || p.IsVisionDifficulty === true || p.isvisiondifficulty === true);
+          g('chk3').checked = (p.isdoublevision === 1 || p.IsDoubleVision === 1 || p.IsDoubleVision === true || p.isdoublevision === true);
+          g('chk4').checked = (p.iswearingcorrection === 1 || p.IsWearingCorrection === 1 || p.IsWearingCorrection === true || p.iswearingcorrection === true);
+
+          resetPhoto();
+          if (p.photo_url) {
+            photoBase64 = p.photo_url; g('photo-prev').src = photoBase64; setPhotoState('preview');
+          }
+
+          if (m === 'view') {
+            g('mtitle').textContent = 'View Patient'; g('msub').textContent = `${p.first_name} ${p.last_name} · ${p.camp_name || ''}`;
+            g('btn-save').style.display = 'none'; g('btn-cancel').style.display = 'none'; g('btn-back').style.display = '';
+            setRO(true);
+          } else {
+            g('mtitle').textContent = 'Update Patient'; g('msub').textContent = `Editing ${p.first_name} ${p.last_name}`;
+            g('save-lbl').textContent = 'Save Changes'; g('btn-save').style.display = '';
+            g('btn-cancel').style.display = ''; g('btn-back').style.display = 'none';
+            setRO(false);
+          }
+        } catch (e) {
+          g('m-err-msg').textContent = getFriendlyErrorMsg(e.message);
+          g('m-err').style.display = 'flex';
+
+          if (btn) { btn.innerHTML = origBtnHtml; btn.disabled = false; }
+          document.body.classList.remove('busy');
+          document.body.style.overflow = '';
+          return;
+        }
+      }
+
+      if (btn) {
+        btn.innerHTML = origBtnHtml;
+        btn.disabled = false;
+      }
+
+      document.body.classList.remove('busy');
+      g('pmod').classList.add('open');
+    }
+
+    function closeM(id) {
+      g(id).classList.remove('open');
+      g('m-err').style.display = 'none';
+      document.body.style.overflow = '';
+      VoiceAssistant.stop();
+      if (id === 'pmod' && cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+      }
+    }
+
+    async function savePat() {
+      document.querySelectorAll('.err').forEach(e => e.classList.remove('err'));
+      g('phu').classList.remove('err');
+      g('m-err').style.display = 'none';
+
+      let ok = true;
+      let errMsg = "";
+
+      const rawPhone = g('mph').value.replace(/\D/g, '');
+      if (rawPhone.length > 0 && rawPhone.length !== 10) {
+        g('mph').classList.add('err');
+        ok = false;
+        errMsg = "Phone number must be exactly 10 digits if provided.";
+      }
+
+      const dob = g('mdob').value;
+      if (dob) {
+        if (!isValidDate(dob)) {
+          g('mdob').classList.add('err');
+          ok = false;
+          errMsg = "Please enter a valid Date of Birth.";
+        } else {
+          const dobDate = new Date(dob);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          if (dobDate > today) {
+            g('mdob').classList.add('err');
+            ok = false;
+            errMsg = "Date of Birth cannot be in the future.";
+          }
+        }
+      }
+
+      if (!ok) {
+        g('m-err-msg').textContent = errMsg;
+        g('m-err').style.display = 'flex';
+
+        const firstErr = document.querySelector('.err');
+        if (firstErr) {
+          firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          firstErr.focus();
+        }
+        return;
+      }
+
+      const saveBtn = g('btn-save');
+      const originalHtml = saveBtn.innerHTML;
+
+      document.body.classList.add('busy');
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = `${btnSpinner} <span id="save-lbl">Saving...</span>`;
+
+      let fullPhone = '';
+      if (g('mph').value.trim()) {
+        fullPhone = `${g('mphcc').value} ${g('mph').value.trim()}`.trim();
+      }
+
+      const d = {
+        first_name: g('mfn').value.trim() || "N/A",
+        last_name: g('mln').value.trim() || "N/A",
+        gender: g('mgen').value,
+        dob: g('mdob').value || null,
+        phone_number: fullPhone,
+        address_line: g('madr').value.trim(),
+        zip_code: g('mzp').value.trim(),
+        country_id: g('mcountry').value ? parseInt(g('mcountry').value) : null,
+        state_id: g('mstate').value ? parseInt(g('mstate').value) : null,
+        city_id: g('mcity').value ? parseInt(g('mcity').value) : null,
+        camp_id: g('mcamp').value ? parseInt(g('mcamp').value) : null,
+        IsBlurredVision: g('chk1').checked ? 1 : 0,
+        IsVisionDifficulty: g('chk2').checked ? 1 : 0,
+        IsDoubleVision: g('chk3').checked ? 1 : 0,
+        IsWearingCorrection: g('chk4').checked ? 1 : 0,
+        photo_base64: photoBase64
+      };
+
+      try {
+        let res;
+        let savedId = g('mid').value;
+
+        if (mode === 'create') {
+          res = await fetch(`${API_BASE}/patients`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(d)
+          });
+          const json = await res.json();
+          if (!res.ok) throw new Error(json.error || 'Failed to save patient');
+          savedId = json.data.id;
+        } else {
+          res = await fetch(`${API_BASE}/patients/${savedId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(d)
+          });
+          const json = await res.json();
+          if (!res.ok) throw new Error(json.error || 'Failed to update patient');
+        }
+
+        closeM('pmod');
+        loadPage(currentPage);
+      } catch (e) {
+        g('m-err-msg').textContent = getFriendlyErrorMsg(e.message);
+        g('m-err').style.display = 'flex';
+      } finally {
+        document.body.classList.remove('busy');
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = originalHtml;
+      }
+    }
+
+    // ─── DELETE ───────────────────────────────────────────────────────
+    async function openDel(id, btn) {
+      did = id;
+      const origBtnHtml = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = `${btnSpinner} Wait...`;
+      document.body.classList.add('busy');
+      document.body.style.overflow = 'hidden';
+
+      try {
+        const r = await fetch(`${API_BASE}/patients/${id}`);
+        const json = await r.json();
+        const p = json.data;
+        g('dmsg').textContent = `Are you sure you want to delete "${p.first_name} ${p.last_name}"? This action is permanent and cannot be undone.`;
+      } catch (e) {
+        g('dmsg').textContent = `Are you sure you want to delete this patient? This action is permanent and cannot be undone.`;
+      } finally {
+        btn.innerHTML = origBtnHtml;
+        btn.disabled = false;
+        document.body.classList.remove('busy');
+        g('dmod').classList.add('open');
+      }
+    }
+
+    async function confirmDel(btn) {
+      const origBtnHtml = btn.innerHTML;
+      document.body.classList.add('busy');
+      btn.disabled = true;
+      btn.innerHTML = `${btnSpinner} Deleting...`;
+
+      try {
+        const res = await fetch(`${API_BASE}/patients/${did}`, { method: 'DELETE' });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error || 'Failed to delete patient');
+
+        closeM('dmod');
+        loadPage(currentPage);
+      } catch (e) {
+        alert(getFriendlyErrorMsg(e.message));
+      } finally {
+        document.body.classList.remove('busy');
+        btn.disabled = false;
+        btn.innerHTML = origBtnHtml;
+      }
+    }
+
+    document.querySelectorAll('.overlay').forEach(o => {
+      o.addEventListener('click', e => { if (e.target === o) closeM(o.id); });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.zip-wrap')) {
+        const dd = g('zip-dropdown');
+        if (dd) dd.classList.remove('open');
+      }
+    });
+
+    // ─── INITIALIZATION ───────────────────────────────────────────────
+    if (typeof Auth !== 'undefined') Auth.checkAuth();
+    if (typeof Layout !== 'undefined') Layout.render('patient');
+
+    window.onload = async () => {
+      Auth.checkAuth();
+      Layout.render('patient');
+
+      const today = new Date().toISOString().split("T")[0];
+      g('mdob').setAttribute('max', today);
+
+      await loadCampsDropdowns();
+      await loadPage(1);
+    };
+  </script>
+</body>
+
+</html>

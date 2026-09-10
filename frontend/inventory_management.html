@@ -1,0 +1,2437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="view-transition" content="same-origin" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Dashboard – iCare Brighter Future Foundation</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <script src="js/app-config-v2.js"></script>
+    <script src="js/layout.js"></script>
+
+    <style>
+        /* ─── CORE STYLES ────────────────── */
+        :root {
+            --navy: #0e2340;
+            --navy-2: #152d52;
+            --navy-3: #1e3f6f;
+            --teal: #1a7fa6;
+            --teal-l: #2496bf;
+            --gold: #f5a623;
+            --gold-h: #f7b84a;
+            --white: #ffffff;
+            --bg: #f0f4f8;
+            --surface: #f8fafc;
+            --text: #0e2340;
+            --text-2: #3a5470;
+            --text-3: #7090aa;
+            --border: #d0dde8;
+            --border-2: #e4edf5;
+            --red: #d94040;
+            --red-bg: #fdf1f1;
+            --green: #1d9e6e;
+            --sb-w: 232px;
+            --hh: 60px;
+            --fh: 44px;
+            --r: 8px;
+            --rl: 12px;
+            --sh: 0 1px 3px rgba(14, 35, 64, .06), 0 4px 16px rgba(14, 35, 64, .08);
+            --shl: 0 8px 40px rgba(14, 35, 64, .18);
+            --ease: cubic-bezier(.4, 0, .2, 1);
+            --sp: .18s;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html {
+            height: 100%
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 13.5px;
+            line-height: 1.5;
+            min-height: 100%;
+            overflow-x: hidden
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(14, 35, 64, .14);
+            border-radius: 4px
+        }
+
+        svg {
+            display: inline-block;
+            vertical-align: middle;
+            flex-shrink: 0
+        }
+
+        body.busy {
+            pointer-events: none;
+        }
+
+        body.busy .main {
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        body.busy .modal {
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        /* Dynamic Layout Styles */
+        .hdr {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 300;
+            height: var(--hh);
+            background: var(--navy);
+            display: flex;
+            align-items: center;
+            box-shadow: 0 1px 0 rgba(255, 255, 255, .06), 0 4px 20px rgba(0, 0, 0, .28)
+        }
+
+        .hbrand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: var(--sb-w);
+            padding: 0 18px;
+            height: 100%;
+            border-right: 1px solid rgba(255, 255, 255, .08);
+            text-decoration: none;
+            flex-shrink: 0;
+            transition: width var(--sp) var(--ease);
+            overflow: hidden
+        }
+
+        .logo-mark {
+            width: 38px;
+            height: 38px;
+            flex-shrink: 0;
+            border-radius: 9px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden
+        }
+
+        .logo-text .l1 {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1.15;
+            white-space: nowrap
+        }
+
+        .logo-text .l1 span {
+            color: var(--gold)
+        }
+
+        .logo-text .l2 {
+            font-size: 10.5px;
+            color: rgba(255, 255, 255, .5);
+            white-space: nowrap;
+            font-weight: 400
+        }
+
+        .hdr-tog {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            margin-left: 4px;
+            color: rgba(255, 255, 255, .6);
+            display: flex;
+            align-items: center;
+            border-radius: 6px;
+            transition: color var(--sp), background var(--sp)
+        }
+
+        .hdr-tog:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, .08)
+        }
+
+        .hdr-r {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: auto;
+            padding: 0 20px
+        }
+
+        .hdr-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, .75);
+            font-size: 13px;
+            font-weight: 500
+        }
+
+        .hdr-av {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--teal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+            text-transform: uppercase;
+        }
+
+        .btn-lo {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255, 255, 255, .08);
+            border: 1px solid rgba(255, 255, 255, .14);
+            color: rgba(255, 255, 255, .8);
+            font-size: 12.5px;
+            font-weight: 500;
+            padding: 5px 13px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background var(--sp);
+            font-family: inherit
+        }
+
+        .btn-lo:hover {
+            background: rgba(255, 255, 255, .16)
+        }
+
+        .sb {
+            position: fixed;
+            top: var(--hh);
+            left: 0;
+            bottom: var(--fh);
+            width: var(--sb-w);
+            background: var(--navy);
+            z-index: 200;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border-right: 1px solid rgba(255, 255, 255, .06);
+            transition: width var(--sp) var(--ease);
+            display: flex;
+            flex-direction: column
+        }
+
+        .sb.col {
+            width: 56px
+        }
+
+        .sb-srch {
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, .06)
+        }
+
+        .sb-sw {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, .07);
+            border: 1px solid rgba(255, 255, 255, .10);
+            border-radius: 6px;
+            padding: 7px 10px;
+            transition: background var(--sp)
+        }
+
+        .sb-sw input {
+            background: none;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-size: 12.5px;
+            width: 100%;
+            font-family: inherit
+        }
+
+        .sb-sw svg {
+            color: rgba(255, 255, 255, .35);
+            flex-shrink: 0
+        }
+
+        .sb.col .sb-sw {
+            justify-content: center;
+            padding: 8px
+        }
+
+        .sb.col .sb-sw input,
+        .sb.col .nl,
+        .sb.col .nsec {
+            display: none
+        }
+
+        .nsec {
+            font-size: 9.5px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, .25);
+            padding: 16px 18px 5px;
+            white-space: nowrap;
+            overflow: hidden
+        }
+
+        .ni {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 18px;
+            color: rgba(255, 255, 255, .58);
+            font-size: 13px;
+            text-decoration: none;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            transition: background var(--sp), color var(--sp);
+            white-space: nowrap;
+            overflow: hidden
+        }
+
+        .ni:hover {
+            background: rgba(255, 255, 255, .06);
+            color: rgba(255, 255, 255, .88)
+        }
+
+        .ni.active {
+            background: rgba(245, 166, 35, .12);
+            color: var(--gold);
+            border-left-color: var(--gold)
+        }
+
+        .sb.col .ni {
+            justify-content: center;
+            padding: 11px;
+            border-left-width: 0
+        }
+
+        .nico {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0
+        }
+
+        .ftr {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--fh);
+            background: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, .32);
+            font-size: 12px;
+            z-index: 200;
+            border-top: 1px solid rgba(255, 255, 255, .06);
+            gap: 4px
+        }
+
+        .ftr strong {
+            color: var(--gold);
+            font-weight: 600
+        }
+
+        /* Main Content Styles */
+        .main {
+            margin-top: var(--hh);
+            margin-left: var(--sb-w);
+            margin-bottom: var(--fh);
+            padding: 28px 30px;
+            transition: margin-left var(--sp) var(--ease);
+            min-height: calc(100vh - var(--hh) - var(--fh))
+        }
+
+        .main.col {
+            margin-left: 56px
+        }
+
+        .ptop {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px
+        }
+
+        .ptitle {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: -.4px
+        }
+
+        .psubtitle {
+            font-size: 13px;
+            color: var(--text-3);
+            margin-top: 2px
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 18px;
+            border-radius: var(--r);
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background var(--sp), transform var(--sp), box-shadow var(--sp);
+            white-space: nowrap
+        }
+
+        .btn:active:not(:disabled) {
+            transform: scale(.98)
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: var(--navy)
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--gold-h);
+            box-shadow: 0 4px 12px rgba(245, 166, 35, .35)
+        }
+
+        .btn-navy {
+            background: var(--navy);
+            color: #fff
+        }
+
+        .btn-navy:hover:not(:disabled) {
+            background: var(--navy-2)
+        }
+
+        .btn-ghost {
+            background: #fff;
+            color: var(--text-2);
+            border: 1.5px solid var(--border)
+        }
+
+        .btn-ghost:hover:not(:disabled) {
+            background: var(--bg)
+        }
+
+        .btn-danger {
+            background: var(--red);
+            color: #fff
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            opacity: .9
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .spin {
+            animation: spin 1s linear infinite;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: var(--rl);
+            box-shadow: var(--sh);
+            margin-bottom: 20px;
+            border: 1px solid var(--border-2)
+        }
+
+        .ch {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 14px 22px;
+            border-bottom: 1px solid var(--border-2)
+        }
+
+        .ch-ico {
+            width: 30px;
+            height: 30px;
+            background: var(--bg);
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--navy-3)
+        }
+
+        .ch-title {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--navy)
+        }
+
+        .cb {
+            padding: 18px 22px
+        }
+
+        .fg {
+            display: grid;
+            gap: 14px
+        }
+
+        .fg-4 {
+            grid-template-columns: repeat(4, 1fr)
+        }
+
+        .fg-3 {
+            grid-template-columns: repeat(3, 1fr)
+        }
+
+        .fg-2 {
+            grid-template-columns: 1fr 1fr
+        }
+
+        @media(max-width:900px) {
+
+            .fg-4,
+            .fg-3 {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        @media(max-width:640px) {
+
+            .fg-4,
+            .fg-3,
+            .fg-2 {
+                grid-template-columns: 1fr
+            }
+        }
+
+        @media(max-width:585px) {
+            .mob-res {
+                display: grid !important;
+            }
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px
+        }
+
+        .field label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-2);
+            text-transform: uppercase;
+            letter-spacing: .55px
+        }
+
+        .field input,
+        .field select,
+        .field textarea {
+            width: 100%;
+            padding: 8.5px 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 7px;
+            font-size: 13px;
+            color: var(--text);
+            background: #fff;
+            outline: none;
+            font-family: inherit;
+            transition: border-color var(--sp), box-shadow var(--sp);
+            appearance: none;
+            -webkit-appearance: none
+        }
+
+        .field input:disabled,
+        .field select:disabled {
+            background: var(--surface);
+            color: var(--text-3);
+            cursor: not-allowed;
+            border-color: var(--border-2);
+        }
+
+        .field select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237090aa' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 30px
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(26, 127, 166, .12)
+        }
+
+        .field input.err,
+        .field select.err,
+        .field textarea.err {
+            border-color: var(--red) !important
+        }
+
+        .req {
+            color: var(--red)
+        }
+
+        .fa {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 16px
+        }
+
+        /* Tables */
+        .tw {
+            overflow-x: auto
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            min-width: 950px;
+        }
+
+        thead tr {
+            background: var(--navy)
+        }
+
+        thead th {
+            padding: 12px 16px;
+            text-align: left;
+            color: rgba(255, 255, 255, .82);
+            font-weight: 600;
+            font-size: 11.5px;
+            letter-spacing: .3px;
+            white-space: nowrap
+        }
+
+        thead th:first-child {
+            border-radius: var(--r) 0 0 0
+        }
+
+        thead th:last-child {
+            border-radius: 0 var(--r) 0 0
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border-2);
+            transition: background var(--sp)
+        }
+
+        tbody tr:last-child {
+            border-bottom: none
+        }
+
+        tbody tr:hover {
+            background: #f4f8fc
+        }
+
+        tbody td {
+            padding: 11px 16px;
+            vertical-align: middle
+        }
+
+        .td-empty {
+            text-align: center;
+            padding: 48px 20px !important;
+            color: var(--text-3);
+            font-size: 13.5px
+        }
+
+        .ag {
+            display: flex;
+            gap: 5px;
+            align-items: center
+        }
+
+        .act {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 11.5px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+            transition: opacity var(--sp), transform var(--sp)
+        }
+
+        .act:hover:not(:disabled) {
+            opacity: .84;
+            transform: translateY(-1px)
+        }
+
+        .act:disabled {
+            opacity: .5;
+            pointer-events: none;
+        }
+
+        .av {
+            background: var(--bg);
+            color: var(--text-2);
+            border: 1.5px solid var(--border)
+        }
+
+        .ae {
+            background: var(--navy-2);
+            color: #fff
+        }
+
+        .ad {
+            background: var(--red);
+            color: #fff
+        }
+
+        .tft {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 13px 22px;
+            border-top: 1px solid var(--border-2);
+            flex-wrap: wrap;
+            gap: 10px
+        }
+
+        .pag {
+            display: flex;
+            gap: 4px;
+            align-items: center
+        }
+
+        .pgb {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 32px;
+            height: 32px;
+            padding: 0 4px;
+            border-radius: 6px;
+            border: 1.5px solid var(--border);
+            background: #fff;
+            color: var(--text-2);
+            font-size: 13px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background var(--sp), border-color var(--sp)
+        }
+
+        .pgb.active {
+            background: var(--navy);
+            color: #fff;
+            border-color: var(--navy)
+        }
+
+        .pgb:hover:not(.active):not(:disabled) {
+            background: var(--bg)
+        }
+
+        .pgb:disabled {
+            opacity: .35;
+            pointer-events: none
+        }
+
+        .pgtext {
+            font-size: 12.5px;
+            color: var(--text-3)
+        }
+
+        .shw {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 12.5px;
+            color: var(--text-3)
+        }
+
+        .shw select {
+            padding: 4px 22px 4px 8px;
+            border: 1.5px solid var(--border);
+            border-radius: 6px;
+            font-size: 12.5px;
+            font-family: inherit;
+            background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%237090aa' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 7px center;
+            appearance: none;
+            -webkit-appearance: none;
+            outline: none
+        }
+
+        /* Specific Inventory Elements */
+        .prescription-badge-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            max-width: 320px;
+        }
+
+        .rx-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11.5px;
+            font-weight: 600;
+            border: 1.5px solid var(--border-2);
+        }
+
+        .rx-badge.od {
+            background: #eff6ff;
+            color: #2b6cb0;
+            border-color: #dbeafe;
+        }
+
+        .rx-badge.os {
+            background: #f3e8ff;
+            color: #6b46c1;
+            border-color: #e9d5ff;
+        }
+
+        /* Modals */
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 500;
+            background: rgba(8, 20, 40, .55);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            padding: 16px
+        }
+
+        .overlay.open {
+            display: flex;
+            animation: oi .15s ease
+        }
+
+        @keyframes oi {
+            from {
+                opacity: 0
+            }
+
+            to {
+                opacity: 1
+            }
+        }
+
+        .modal {
+            background: #fff;
+            border-radius: var(--rl);
+            box-shadow: var(--shl);
+            width: 100%;
+            max-width: 850px;
+            max-height: 92vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: mi .2s var(--ease);
+            border: 1px solid var(--border-2)
+        }
+
+        @keyframes mi {
+            from {
+                transform: translateY(20px);
+                opacity: 0
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1
+            }
+        }
+
+        .msm {
+            max-width: 420px
+        }
+
+        .mhdr {
+            background: var(--navy);
+            padding: 16px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0
+        }
+
+        .mhl {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .mico {
+            width: 32px;
+            height: 32px;
+            background: rgba(245, 166, 35, .18);
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold)
+        }
+
+        .mtitle {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700
+        }
+
+        .msub {
+            color: rgba(255, 255, 255, .48);
+            font-size: 11.5px;
+            margin-top: 1px
+        }
+
+        .mcls {
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .14);
+            color: rgba(255, 255, 255, .7);
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background var(--sp)
+        }
+
+        .mcls:hover {
+            background: rgba(255, 255, 255, .2);
+            color: #fff
+        }
+
+        .mbody {
+            padding: 22px 24px;
+            overflow-y: auto;
+            flex: 1
+        }
+
+        .mfoot {
+            padding: 14px 22px;
+            border-top: 1px solid var(--border-2);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            background: var(--surface);
+            flex-shrink: 0
+        }
+
+        .mg {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px
+        }
+
+        @media(max-width:640px) {
+            .mg {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .mg .s2 {
+            grid-column: 1/-1
+        }
+
+        .fd {
+            grid-column: 1/-1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 12px 0 2px
+        }
+
+        .fdl {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            color: var(--teal);
+            white-space: nowrap
+        }
+
+        .fdln {
+            flex: 1;
+            height: 1px;
+            background: var(--border-2)
+        }
+
+        .mbody.ro .field input,
+        .mbody.ro .field select,
+        .mbody.ro .field textarea {
+            background: var(--surface) !important;
+            color: var(--text-2) !important;
+            border-color: var(--border) !important;
+            cursor: default;
+            pointer-events: none
+        }
+
+        .cc {
+            padding: 30px 28px 22px;
+            text-align: center
+        }
+
+        .ciw {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--red-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            color: var(--red)
+        }
+
+        .cc h3 {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--navy)
+        }
+
+        .cc p {
+            font-size: 13.5px;
+            color: var(--text-3);
+            line-height: 1.6
+        }
+
+        .cft {
+            display: flex;
+            gap: 10px;
+            padding: 14px 22px;
+            border-top: 1px solid var(--border-2);
+            justify-content: center;
+            background: var(--surface)
+        }
+
+        .alert-box {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border-radius: var(--r);
+            margin-bottom: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            background: var(--red-bg);
+            border: 1.5px solid rgba(217, 64, 64, 0.15);
+            color: var(--red);
+        }
+
+        .alert-icon {
+            font-size: 20px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .success-box {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border-radius: var(--r);
+            margin-bottom: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            background: var(--success-bg);
+            border: 1.5px solid rgba(16, 185, 129, 0.15);
+            color: var(--green);
+        }
+
+        /* Excel Drag Drop */
+        .phu {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 36px 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color var(--sp), background var(--sp);
+            background: var(--surface);
+            position: relative;
+            overflow: hidden;
+            display: block;
+        }
+
+        .phu:hover {
+            border-color: var(--teal);
+            background: #f0f8fb
+        }
+
+        .phu input[type=file] {
+            display: none
+        }
+
+        .phu-ico {
+            color: var(--text-3);
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: center
+        }
+
+        .phu-txt strong {
+            display: block;
+            color: var(--text-2);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px
+        }
+
+        .phu-txt span {
+            font-size: 12.5px;
+            color: var(--text-3)
+        }
+
+        .preview-summary-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+            background: var(--surface);
+            padding: 10px 16px;
+            border-radius: var(--r);
+            border: 1px solid var(--border-2);
+        }
+
+        .preview-table-container {
+            max-height: 220px;
+            overflow-y: auto;
+            margin-top: 16px;
+            border: 1px solid var(--border-2);
+            border-radius: var(--r);
+        }
+
+        .preview-table-container table th {
+            background: var(--bg);
+            color: var(--text-2);
+        }
+
+        /* Quick Update Table */
+        .qu-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+
+        .qu-table th,
+        .qu-table td {
+            padding: 12px;
+            font-size: 13.5px;
+            border-bottom: 1px solid var(--border-2);
+        }
+
+        .qu-table th {
+            background: var(--surface);
+            font-weight: 600;
+            color: var(--text-2);
+            text-align: left;
+        }
+
+        .od-align-style {
+            grid-column: auto !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="main" id="main">
+        <div class="ptop">
+            <div>
+                <h1 class="ptitle">Inventory Dashboard</h1>
+                <p class="psubtitle">Register, adjust, and track stocks across all optical items</p>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center;" class="mob-res">
+                <button class="btn btn-ghost" onclick="exportToCSV(this)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    <span>Export CSV</span>
+                </button>
+
+                <button id="btn-upload-excel" class="btn btn-navy" onclick="openM('uploadModal')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="17 8 12 3 7 8" />
+                        <line x1="12" y1="3" x2="12" y2="15" />
+                    </svg>
+                    <span>Upload Excel</span>
+                </button>
+                <button id="btn-add-inventory" class="btn btn-primary" onclick="openM('skuSearchModal')">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    <span>Add / Update Inventory</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="ch">
+                <div class="ch-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round">
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg></div>
+                <span class="ch-title">Search &amp; Filter</span>
+            </div>
+            <div class="cb">
+                <div class="fg fg-4" style="margin-bottom:16px">
+                    <div class="field"><label>SKU</label><input type="text" id="searchSKU" placeholder="Enter SKU">
+                    </div>
+                    <div class="field"><label>Description</label><input type="text" id="searchName"
+                            placeholder="Enter Product Name"></div>
+                    <div class="field"><label>SPH</label><input type="text" inputmode="decimal" id="searchSPH"
+                            placeholder="e.g. -1.25">
+                    </div>
+                    <div class="field"><label>CYL</label><input type="text" inputmode="decimal" id="searchCYL"
+                            placeholder="e.g. -0.50">
+                    </div>
+                </div>
+                <div class="fa">
+                    <button class="btn btn-navy" onclick="searchInventory(this)">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round">
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        </svg>Search
+                    </button>
+                    <button class="btn btn-ghost" onclick="clearSearch(this)">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>Clear
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="tw">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>SKU</th>
+                            <th>Lens Type</th>
+                            <th>Prescription Details</th>
+                            <th>Available Qty</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryTable"></tbody>
+                </table>
+            </div>
+            <div class="tft">
+                <div class="pag" id="pag-wrap"></div>
+                <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+                    <div class="shw">
+                        Show
+                        <select id="per-page" onchange="changePerPage()">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                        </select>
+                        items
+                    </div>
+                    <span class="pgtext" id="pag-info"></span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="overlay" id="skuSearchModal">
+        <div class="modal msm">
+            <div class="mhdr">
+                <div class="mhl">
+                    <div class="mico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="17 8 12 3 7 8" />
+                            <line x1="12" y1="3" x2="12" y2="15" />
+                        </svg></div>
+                    <div>
+                        <div class="mtitle">Add / Update Inventory</div>
+                        <div class="msub">Step 1: Check existing SKU</div>
+                    </div>
+                </div>
+                <button class="mcls" onclick="closeM('skuSearchModal')"><svg width="14" height="14" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg></button>
+            </div>
+            <div class="mbody">
+                <div class="alert-box" id="skuSearchAlert">
+                    <span class="alert-icon">⚠️</span>
+                    <span id="skuSearchError"></span>
+                </div>
+
+                <div class="field">
+                    <label>Type SKU to Search <span class="req">*</span></label>
+                    <input type="text" id="skuSearchInput" placeholder="Enter SKU (letters/numbers only)">
+                </div>
+            </div>
+            <div class="mfoot">
+                <button class="btn btn-ghost" onclick="closeM('skuSearchModal')">Cancel</button>
+                <button class="btn btn-primary" id="btn-sku-search" onclick="handleSkuSearchSubmit()">Search</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="quickUpdateModal">
+        <div class="modal" style="max-width: 50%;">
+            <div class="mhdr">
+                <div class="mhl">
+                    <div class="mico" style="background:rgba(26,127,166,.15); color:var(--teal);"><svg width="16"
+                            height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 4 23 10 17 10" />
+                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                        </svg></div>
+                    <div>
+                        <div class="mtitle">Quick Stock Update</div>
+                        <div class="msub">Add stock to existing item</div>
+                    </div>
+                </div>
+                <button class="mcls" onclick="closeM('quickUpdateModal')"><svg width="14" height="14"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg></button>
+            </div>
+            <div class="mbody" style="padding:0;">
+                <div class="alert-box" id="quAlert" style="margin:16px 24px 0;">
+                    <span class="alert-icon">⚠️</span>
+                    <span id="quQtyError"></span>
+                </div>
+            </div>
+            <table class="qu-table">
+                <thead>
+                    <tr>
+                        <th>SKU</th>
+                        <th>Available</th>
+                        <th>Stock to Add <span class="req">*</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <strong id="quSku" style="color:var(--navy); display:block;"></strong>
+                            <span id="quName" style="color:var(--text-3); font-size:11.5px;"></span>
+                        </td>
+                        <td id="quPrevStock" style="font-weight:600;"></td>
+                        <td>
+                            <div class="field"><input type="number" id="quCurrentStock" min="1" placeholder="e.g. 5"
+                                    style="width: 80px;"></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="mfoot">
+            <button class="btn btn-ghost" onclick="closeM('quickUpdateModal')">Cancel</button>
+            <button class="btn btn-primary" id="btn-qu-save" onclick="saveQuickUpdate()">Save Stock</button>
+        </div>
+    </div>
+    </div>
+
+    <div class="overlay" id="inventoryModal">
+        <div class="modal">
+            <div class="mhdr">
+                <div class="mhl">
+                    <div class="mico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round">
+                            <path
+                                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                            <line x1="12" y1="22.08" x2="12" y2="12" />
+                        </svg></div>
+                    <div>
+                        <div class="mtitle" id="modalTitle">Create / Edit Item</div>
+                        <div class="msub" id="modalSub">Fill in the details below</div>
+                    </div>
+                </div>
+                <button class="mcls" onclick="closeM('inventoryModal')"><svg width="14" height="14" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg></button>
+            </div>
+            <div class="mbody" id="invBody">
+                <div class="alert-box" id="invAlert">
+                    <span class="alert-icon">⚠️</span>
+                    <span id="invError"></span>
+                </div>
+                <div class="success-box" id="invSuccess">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                        <polyline points="22 4 12 14.01 9 11.01" />
+                    </svg>
+                    <span id="invSuccessMsg"></span>
+                </div>
+
+                <div class="mg">
+                    <div class="fd"><span class="fdl">Basic Information</span><span class="fdln"></span></div>
+                    <div class="field"><label>SKU <span class="req">*</span></label><input type="text" id="sku"
+                            placeholder="Item Code"></div>
+                    <div class="field"><label>Category <span class="req">*</span></label>
+                        <select id="category">
+                            <option value="">Select Category</option>
+                            <option>Single Vision</option>
+                            <option>Bifocal</option>
+                            <option>Progressive</option>
+                            <option>Sunglasses</option>
+                            <option>Contact Lens</option>
+                            <option>Frame</option>
+                        </select>
+                    </div>
+                    <div class="field s2"><label>Description <span class="req">*</span></label><input type="text"
+                            id="productName" placeholder="Product Name"></div>
+
+                    <!-- Right Eye Group -->
+                    <div>
+                        <div class="fd" style="margin-top:0; margin-bottom:12px;"><span class="fdl">Prescription (Right
+                                Eye / OD)</span><span class="fdln"></span></div>
+                        <div class="fg fg-3">
+                            <div class="field"><label>SPH</label><input type="text" inputmode="decimal" id="sph_right"
+                                    placeholder="0.00">
+                            </div>
+                            <div class="field"><label>CYL</label><input type="text" inputmode="decimal" id="cyl_right"
+                                    placeholder="0.00">
+                            </div>
+                            <div class="field"><label>Axis</label><input type="number" id="axis_right" min="0" max="180"
+                                    placeholder="0-180"></div>
+                        </div>
+                    </div>
+
+                    <!-- Left Eye Group -->
+                    <div>
+                        <div class="fd" style="margin-top:0; margin-bottom:12px;"><span class="fdl"
+                                style="color:#7c3aed;">Prescription (Left Eye / OS)</span><span class="fdln"></span>
+                        </div>
+                        <div class="fg fg-3">
+                            <div class="field"><label>SPH</label><input type="text" inputmode="decimal" id="sph_left"
+                                    placeholder="0.00">
+                            </div>
+                            <div class="field"><label>CYL</label><input type="text" inputmode="decimal" id="cyl_left"
+                                    placeholder="0.00">
+                            </div>
+                            <div class="field"><label>Axis</label><input type="number" id="axis_left" min="0" max="180"
+                                    placeholder="0-180"></div>
+                        </div>
+                    </div>
+
+                    <div class="fd s2"><span class="fdl">Product Details &amp; Stock</span><span class="fdln"></span>
+                    </div>
+                    <div class="field"><label>Lens Type</label>
+                        <select id="lensType">
+                            <option value="">Select Lens</option>
+                            <option>Single Vision</option>
+                            <option>Bifocal</option>
+                            <option>Progressive</option>
+                        </select>
+                    </div>
+                    <div class="field"><label>Quantity / Stock <span class="req">*</span></label><input type="number"
+                            id="quantity" min="1" placeholder="Initial Stock Quantity"></div>
+
+                    <div class="field"><label>Lens Color</label>
+                        <select id="lensColor">
+                            <option value="">Select Color</option>
+                            <option>Clear</option>
+                            <option>Tinted</option>
+                            <option>Polarized</option>
+                        </select>
+                    </div>
+                    <div class="field"><label>Lens Material</label>
+                        <select id="lensMaterial">
+                            <option value="">Select Material</option>
+                            <option>CR-39</option>
+                            <option>Polycarbonate</option>
+                            <option>Glass</option>
+                        </select>
+                    </div>
+
+                    <div class="field"><label>Frame Material</label>
+                        <select id="frameMaterial">
+                            <option value="">Select Material</option>
+                            <option>Metal</option>
+                            <option>Acetate</option>
+                            <option>Plastic</option>
+                        </select>
+                    </div>
+                    <div class="field"><label>Frame Size</label>
+                        <select id="frameSize">
+                            <option value="">Select Size</option>
+                            <option value="Small">Small</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Large">Large</option>
+                        </select>
+                    </div>
+
+                    <div class="field"><label>Frame Color</label>
+                        <select id="frameColor">
+                            <option value="">Select Color</option>
+                            <option>Black</option>
+                            <option>Brown</option>
+                            <option>Grey</option>
+                        </select>
+                    </div>
+                    <div class="field"><label>Lens Gender</label>
+                        <select id="lensGender">
+                            <option value="">Select Gender</option>
+                            <option>Unisex</option>
+                            <option>Men</option>
+                            <option>Women</option>
+                        </select>
+                    </div>
+
+                    <div class="field"><label>Vendor</label><input type="text" id="vendor"
+                            placeholder="Supplier Vendor"></div>
+                    <div class="field"><label>Notes</label><input type="text" id="notes" placeholder="Optional Notes">
+                    </div>
+
+                </div>
+            </div>
+            <div class="mfoot">
+                <button class="btn btn-ghost" id="btn-inv-back" onclick="closeM('inventoryModal')"
+                    style="display:none">Back</button>
+                <button class="btn btn-ghost" id="btn-inv-cancel" onclick="closeM('inventoryModal')">Cancel</button>
+                <button class="btn btn-primary" id="btn-inv-save" onclick="saveInventory()"><span id="inv-save-lbl">Save
+                        Item</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="uploadModal">
+        <div class="modal">
+            <div class="mhdr">
+                <div class="mhl">
+                    <div class="mico" style="background:rgba(26,127,166,.15); color:var(--teal);"><svg width="16"
+                            height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="17 8 12 3 7 8" />
+                            <line x1="12" y1="3" x2="12" y2="15" />
+                        </svg></div>
+                    <div>
+                        <div class="mtitle">Bulk Excel/CSV Upload</div>
+                        <div class="msub">Upload multiple items simultaneously</div>
+                    </div>
+                </div>
+                <button class="mcls" onclick="closeM('uploadModal')"><svg width="14" height="14" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg></button>
+            </div>
+            <div class="mbody">
+                <label class="phu" id="dropZone">
+                    <div class="phu-ico"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="17 8 12 3 7 8" />
+                            <line x1="12" y1="3" x2="12" y2="15" />
+                        </svg></div>
+                    <div class="phu-txt"><strong>Drag & drop Excel or CSV file here</strong><span>or click to
+                            browse</span></div>
+                    <input type="file" id="excelFile" accept=".csv,.xlsx,.xls">
+                </label>
+
+                <div id="uploadPreviewContainer" style="display: none; margin-top: 24px;">
+                    <div class="fd"><span class="fdl">Rows Preview & Validation</span><span class="fdln"></span></div>
+                    <div class="preview-table-container tw">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Row #</th>
+                                    <th>SKU</th>
+                                    <th>Qty</th>
+                                    <th>Status</th>
+                                    <th>Message</th>
+                                </tr>
+                            </thead>
+                            <tbody id="previewTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="preview-summary-box">
+                        <span id="previewSummary" style="font-size: 13.5px; color:var(--text-2);"></span>
+                        <button class="btn btn-danger" id="downloadReportBtn" onclick="downloadErrorReport()"
+                            style="padding:6px 12px;">Download Errors</button>
+                    </div>
+                </div>
+            </div>
+            <div class="mfoot">
+                <button class="btn btn-ghost" onclick="closeM('uploadModal')">Cancel</button>
+                <button id="confirmImportBtn" class="btn btn-navy" onclick="validateAndImportUpload()" disabled>Confirm
+                    & Import</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="deleteModal">
+        <div class="modal msm">
+            <div class="mhdr">
+                <div class="mhl">
+                    <div class="mico" style="background:rgba(217,64,64,.2);color:var(--red)"><svg width="16" height="16"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round">
+                            <polyline points="3 6 5 6 21 6" />
+                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                        </svg></div>
+                    <div class="mtitle">Delete / Reduce Stock</div>
+                </div>
+                <button class="mcls" onclick="closeM('deleteModal')"><svg width="14" height="14" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg></button>
+            </div>
+            <div class="cc" style="padding-bottom:12px;">
+                <div class="ciw"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round">
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                        <path d="M10 11v6" />
+                        <path d="M14 11v6" />
+                        <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                    </svg></div>
+                <h3>Remove Item Stock?</h3>
+                <p style="margin-bottom:8px;">Deducting stock for SKU: <strong id="deleteSkuText"
+                        style="color:var(--navy);"></strong></p>
+                <p style="margin-bottom:16px;">Available Quantity: <strong id="deleteAvailableQty"
+                        style="color:var(--navy);">0</strong></p>
+
+                <div class="alert-box" id="delAlert" style="text-align:left;">
+                    <span class="alert-icon">⚠️</span>
+                    <span id="deleteQtyError"></span>
+                </div>
+
+                <div class="field" style="text-align:left;"><label>How many to delete? <span
+                            class="req">*</span></label>
+                    <input type="number" id="deleteQtyInput" min="1" placeholder="Enter quantity to deduct">
+                </div>
+            </div>
+            <div class="cft">
+                <button class="btn btn-ghost" onclick="closeM('deleteModal')">Cancel</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn" onclick="submitDelete()">Confirm Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ─── UTILS & CONSTANTS ────────────────────────────────────────────
+        const INVENTORY_API_URL = API_BASE;
+        const btnSpinner = `<svg class="spin" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.22-8.56"/></svg>`;
+
+        const g = id => document.getElementById(id);
+
+        let inventoryData = [];
+        let currentCoordinatorId = '';
+        let currentRole = '';
+        let currentEditIndex = -1;
+        let currentDeleteIndex = -1;
+        let isEditingMode = false;
+        let parsedUploadRows = [];
+
+        // Session check
+        if (typeof Auth !== 'undefined') {
+            const session = Auth.getSession();
+            if (session) {
+                currentRole = session.role_name || session.role;
+                // Explicit SysAdmin / Volunteer isolation
+                if (currentRole !== 'SysAdmin' && currentRole !== 'Volunteer') {
+                    currentCoordinatorId = session.effectiveCoordinatorId || session.id || '';
+                } else {
+                    // Global view for Sysadmin, prevents saving items with a sysadmin ID.
+                    currentCoordinatorId = '';
+                }
+            }
+        }
+
+        function setUIBusy(isBusy) {
+            if (isBusy) document.body.classList.add('busy');
+            else document.body.classList.remove('busy');
+        }
+
+        // ─── MODAL CONTROLLERS ────────────────────────────────────────────
+        function openM(id) {
+            document.body.classList.add('busy');
+            document.body.style.overflow = 'hidden';
+
+            if (g('skuSearchAlert')) g('skuSearchAlert').style.display = 'none';
+            if (g('quAlert')) g('quAlert').style.display = 'none';
+            if (g('invAlert')) g('invAlert').style.display = 'none';
+            if (g('invSuccess')) g('invSuccess').style.display = 'none';
+            if (g('delAlert')) g('delAlert').style.display = 'none';
+            document.querySelectorAll('.err').forEach(e => e.classList.remove('err'));
+
+            if (id === 'skuSearchModal') { g('skuSearchInput').value = ''; }
+            if (id === 'uploadModal') { resetUploadModal(); }
+
+            document.body.classList.remove('busy');
+            g(id).classList.add('open');
+        }
+
+        function closeM(id) {
+            g(id).classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // ─── TABLE & FETCH LOGIC ──────────────────────────────────────────
+        let currentPage = 1;
+
+        function changePerPage() {
+            loadInventory(1);
+        }
+
+        async function loadInventory(page = 1, queryString = '') {
+            currentPage = page;
+            const pageSize = parseInt(g('per-page').value) || 10;
+            const offset = (page - 1) * pageSize;
+
+            const tb = g('inventoryTable');
+            tb.innerHTML = `<tr><td colspan="5" class="td-empty"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" style="display:block;margin:0 auto 8px;animation:spin .7s linear infinite"><path d="M21 12a9 9 0 1 1-6.22-8.56"/></svg>Loading inventory...</td></tr>`;
+
+            try {
+                const base = `${INVENTORY_API_URL}/inventory`;
+                const params = new URLSearchParams(queryString);
+                if (currentCoordinatorId) params.append('coordinator_id', currentCoordinatorId);
+
+                // Add Pagination Parameters
+                params.append('limit', pageSize);
+                params.append('offset', offset);
+
+                const url = params.toString() ? `${base}?${params.toString()}` : base;
+
+                const res = await fetch(url, { method: 'GET' });
+                const json = await res.json();
+
+                if (json.ok) {
+                    inventoryData = json.data.items || [];
+                    const total = json.data.pagination ? json.data.pagination.total : 0;
+                    renderTable();
+                    renderPagination(total, pageSize, page);
+                } else {
+                    tb.innerHTML = `<tr><td colspan="5" class="td-empty" style="color:var(--red)">Error: ${json.error}</td></tr>`;
+                    g('pag-wrap').innerHTML = '';
+                    g('pag-info').textContent = 'Error';
+                }
+            } catch (err) {
+                tb.innerHTML = `<tr><td colspan="5" class="td-empty" style="color:var(--red)">Network Error connecting to API.</td></tr>`;
+                g('pag-wrap').innerHTML = '';
+                g('pag-info').textContent = 'Network Error';
+            }
+        }
+
+        function renderPagination(total, pageSize, page) {
+            const pagEl = g('pag-wrap');
+            const infoEl = g('pag-info');
+            if (!pagEl || !infoEl) return;
+            pagEl.innerHTML = '';
+
+            const tp = Math.ceil(total / pageSize) || 1;
+
+            const mk = (label, pg, disabled, active) => {
+                const b = document.createElement('button');
+                b.className = 'pgb' + (active ? ' active' : '');
+                b.innerHTML = label; b.disabled = disabled || false;
+                if (!disabled) b.onclick = () => {
+                    // Preserve search state when switching pages
+                    const params = new URLSearchParams();
+                    if (g('searchSKU').value.trim()) params.append('sku', g('searchSKU').value.trim());
+                    if (g('searchName').value.trim()) params.append('name', g('searchName').value.trim());
+                    if (g('searchSPH').value.trim()) params.append('sph', g('searchSPH').value.trim());
+                    if (g('searchCYL').value.trim()) params.append('cyl', g('searchCYL').value.trim());
+                    loadInventory(pg, params.toString());
+                };
+                pagEl.appendChild(b);
+            };
+
+            mk('Prev', page - 1, page === 1, false);
+
+            const show = new Set([1, tp]);
+            for (let i = Math.max(1, page - 2); i <= Math.min(tp, page + 2); i++) show.add(i);
+
+            let prev = 0;
+            Array.from(show).sort((a, b) => a - b).forEach(i => {
+                if (prev && i - prev > 1) {
+                    const d = document.createElement('span');
+                    d.textContent = '…';
+                    d.style.cssText = 'padding:0 5px;color:var(--text-3);line-height:32px';
+                    pagEl.appendChild(d);
+                }
+                mk(i, i, false, i === page);
+                prev = i;
+            });
+
+            mk('Next', page + 1, page === tp, false);
+
+            const s = total > 0 ? (page - 1) * pageSize + 1 : 0;
+            const e = Math.min(page * pageSize, total);
+            infoEl.textContent = total > 0 ? `Showing ${s}–${e} of ${total} items` : 'No entries';
+        }
+
+        function renderTable() {
+            const tb = g('inventoryTable');
+            tb.innerHTML = '';
+
+            if (inventoryData.length === 0) {
+                tb.innerHTML = `<tr><td colspan="5" class="td-empty"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="display:block;margin:0 auto 10px;color:var(--border)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>No inventory items found.</td></tr>`;
+                return;
+            }
+
+            const cannotEdit = (currentRole === 'SysAdmin' || currentRole === 'Volunteer');
+
+            inventoryData.forEach((item, index) => {
+                const odStr = `OD (R): SPH: ${item.od_sph || '0.00'} | CYL: ${item.od_cyl || '0.00'} | Axis: ${item.od_axis || '0'}`;
+                const osStr = `OS (L): SPH: ${item.os_sph || '0.00'} | CYL: ${item.os_cyl || '0.00'} | Axis: ${item.os_axis || '0'}`;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+            <td><strong style="color:var(--navy);">${item.sku}</strong></td>
+            <td>${item.lensType || '—'}</td>
+            <td>
+                <div class="prescription-badge-container">
+                    <span class="rx-badge od">${odStr}</span>
+                    <span class="rx-badge os">${osStr}</span>
+                </div>
+            </td>
+            <td><strong>${item.available_qty || item.quantity || 0}</strong></td>
+            <td>
+                <div class="ag">
+                    <button class="act av" onclick="viewInventory(${index})">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View
+                    </button>
+                    
+                    ${!cannotEdit ? `
+                    <button class="act ae" onclick="editInventory(${index})">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Update
+                    </button>
+                    <button class="act ad" onclick="openDeleteModal(${index})">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>Delete
+                    </button>
+                    ` : ''}
+                </div>
+            </td>
+        `;
+                tb.appendChild(tr);
+            });
+        }
+
+        async function searchInventory(btn) {
+            const origHtml = btn.innerHTML;
+            btn.innerHTML = `${btnSpinner} Searching...`;
+            btn.disabled = true;
+            setUIBusy(true);
+
+            const params = new URLSearchParams();
+            if (g('searchSKU').value.trim()) params.append('sku', g('searchSKU').value.trim());
+            if (g('searchName').value.trim()) params.append('name', g('searchName').value.trim());
+            if (g('searchSPH').value.trim()) params.append('sph', g('searchSPH').value.trim());
+            if (g('searchCYL').value.trim()) params.append('cyl', g('searchCYL').value.trim());
+
+            await loadInventory(1, params.toString());
+
+            btn.innerHTML = origHtml;
+            btn.disabled = false;
+            setUIBusy(false);
+        }
+
+        async function clearSearch(btn) {
+            const origHtml = btn.innerHTML;
+            btn.innerHTML = `${btnSpinner} Clearing...`;
+            btn.disabled = true;
+            setUIBusy(true);
+
+            g('searchSKU').value = ''; g('searchName').value = '';
+            g('searchSPH').value = ''; g('searchCYL').value = '';
+
+            await loadInventory(1);
+
+            btn.innerHTML = origHtml;
+            btn.disabled = false;
+            setUIBusy(false);
+        }
+
+        async function exportToCSV(btn) {
+            const origHtml = btn.innerHTML;
+            btn.innerHTML = `${btnSpinner} Exporting...`;
+            btn.disabled = true;
+            setUIBusy(true);
+
+            try {
+                // Fetch up to API backend limit (200)
+                let url = `${INVENTORY_API_URL}/inventory?limit=200`;
+                if (currentCoordinatorId) url += `&coordinator_id=${currentCoordinatorId}`;
+
+                const res = await fetch(url);
+                const json = await res.json();
+
+                if (json.ok) {
+                    let items = json.data.items || [];
+
+                    // 1. Client-Side Filtering to strictly match UI search inputs
+                    const fSku = g('searchSKU').value.trim().toLowerCase();
+                    const fName = g('searchName').value.trim().toLowerCase();
+                    const fSph = g('searchSPH').value.trim();
+                    const fCyl = g('searchCYL').value.trim();
+
+                    if (fSku) items = items.filter(i => (i.sku || '').toLowerCase().includes(fSku));
+                    if (fName) items = items.filter(i => (i.description || i.product_name || '').toLowerCase().includes(fName));
+
+                    if (fSph) {
+                        const targetSph = parseFloat(fSph);
+                        items = items.filter(i =>
+                            Math.abs((parseFloat(i.od_sph) || 0) - targetSph) <= 0.25 ||
+                            Math.abs((parseFloat(i.os_sph) || 0) - targetSph) <= 0.25
+                        );
+                    }
+                    if (fCyl) {
+                        const targetCyl = parseFloat(fCyl);
+                        items = items.filter(i =>
+                            Math.abs((parseFloat(i.od_cyl) || 0) - targetCyl) <= 0.25 ||
+                            Math.abs((parseFloat(i.os_cyl) || 0) - targetCyl) <= 0.25
+                        );
+                    }
+
+                    if (items.length === 0) {
+                        alert("No items match the current filters to export.");
+                        return;
+                    }
+
+                    // 2. Build CSV with ALL fields included
+                    let csv = "SKU,Product Name,Category,Quantity,OD SPH,OD CYL,OD AXIS,OS SPH,OS CYL,OS AXIS,Lens Type,Lens Color,Lens Material,Frame Material,Frame Size,Frame Color,Lens Gender,Vendor,Notes\n";
+                    items.forEach(item => {
+                        const desc = (item.description || item.product_name || '').replace(/"/g, '""');
+                        const vendor = (item.vendor || '').replace(/"/g, '""');
+                        const notes = (item.notes || '').replace(/"/g, '""');
+
+                        csv += `"${item.sku}","${desc}","${item.category || ''}","${item.available_qty || item.quantity || 0}","${item.od_sph || ''}","${item.od_cyl || ''}","${item.od_axis || ''}","${item.os_sph || ''}","${item.os_cyl || ''}","${item.os_axis || ''}","${item.lens_type || item.lensType || ''}","${item.lens_color || item.lensColor || ''}","${item.lens_material || item.lensMaterial || ''}","${item.frame_material || item.frameMaterial || ''}","${item.frame_size || item.frameSize || ''}","${item.frame_color || item.frameColor || ''}","${item.lens_gender || item.lensGender || ''}","${vendor}","${notes}"\n`;
+                    });
+
+                    const blob = new Blob([csv], { type: 'text/csv' });
+                    const link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = "inventory_export.csv";
+                    link.click();
+                } else {
+                    alert("Export failed: " + json.error);
+                }
+            } catch (e) {
+                alert("Network error during export.");
+            } finally {
+                btn.innerHTML = origHtml;
+                btn.disabled = false;
+                setUIBusy(false);
+            }
+        }
+
+        // ─── SKU SEARCH FLOW ──────────────────────────────────────────────
+        function openSkuSearchModal() { openM('skuSearchModal'); }
+
+        async function handleSkuSearchSubmit() {
+            const val = g('skuSearchInput').value.trim().toUpperCase();
+            const alertBox = g('skuSearchAlert');
+            const errMsg = g('skuSearchError');
+
+            alertBox.style.display = 'none';
+            if (!val || !/^[A-Z0-9_-]+$/.test(val)) {
+                errMsg.textContent = 'Valid SKU required (letters, numbers, hyphen, underscore)';
+                alertBox.style.display = 'flex';
+                return;
+            }
+
+            const btn = g('btn-sku-search');
+            const origText = btn.innerHTML;
+            btn.disabled = true; btn.innerHTML = `${btnSpinner} Wait...`;
+            document.body.classList.add('busy');
+
+            try {
+                const url = currentCoordinatorId ?
+                    `${INVENTORY_API_URL}/inventory/sku/${val}?coordinator_id=${currentCoordinatorId}` :
+                    `${INVENTORY_API_URL}/inventory/sku/${val}`;
+
+                const res = await fetch(url);
+                const json = await res.json();
+
+                if (json.ok) {
+                    closeM('skuSearchModal');
+                    if (json.data.found) openQuickUpdateModal(json.data.item);
+                    else openInsertModalForNew(val);
+                } else {
+                    errMsg.textContent = json.error;
+                    alertBox.style.display = 'flex';
+                }
+            } catch (err) {
+                errMsg.textContent = "Network error connecting to API.";
+                alertBox.style.display = 'flex';
+            } finally {
+                btn.disabled = false; btn.innerHTML = origText;
+                document.body.classList.remove('busy');
+            }
+        }
+
+        // ─── QUICK UPDATE MODAL ───────────────────────────────────────────
+        let activeQuickUpdateItem = null;
+        function openQuickUpdateModal(item) {
+            activeQuickUpdateItem = item;
+            g('quSku').innerText = item.sku;
+            g('quName').innerText = item.description || item.product_name || '';
+            g('quPrevStock').innerText = item.available_qty || item.quantity || 0;
+            g('quCurrentStock').value = '';
+            g('quCurrentStock').classList.remove('err');
+            openM('quickUpdateModal');
+        }
+
+        async function saveQuickUpdate() {
+            const qty = parseInt(g('quCurrentStock').value);
+            const alertBox = g('quAlert');
+            const errMsg = g('quQtyError');
+
+            alertBox.style.display = 'none';
+            g('quCurrentStock').classList.remove('err');
+
+            if (isNaN(qty) || qty <= 0) {
+                g('quCurrentStock').classList.add('err');
+                errMsg.textContent = 'Enter a valid quantity greater than 0';
+                alertBox.style.display = 'flex';
+                return;
+            }
+
+            const btn = g('btn-qu-save');
+            const origText = btn.innerHTML;
+            btn.disabled = true; btn.innerHTML = `${btnSpinner} Saving...`;
+            document.body.classList.add('busy');
+
+            try {
+                const payload = { stock_to_add: qty };
+                if (currentCoordinatorId) payload.coordinator_id = currentCoordinatorId;
+
+                const res = await fetch(`${INVENTORY_API_URL}/inventory/sku/${activeQuickUpdateItem.sku}/quick-update`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const json = await res.json();
+                if (json.ok) {
+                    closeM('quickUpdateModal');
+                    loadInventory();
+                } else {
+                    errMsg.textContent = json.error;
+                    alertBox.style.display = 'flex';
+                }
+            } catch (err) {
+                errMsg.textContent = "Network error.";
+                alertBox.style.display = 'flex';
+            } finally {
+                btn.disabled = false; btn.innerHTML = origText;
+                document.body.classList.remove('busy');
+            }
+        }
+
+        // ─── FULL ADD / EDIT MODAL ────────────────────────────────────────
+        function setInvRO(ro) {
+            g('invBody').querySelectorAll('input,select').forEach(el => {
+                el.readOnly = ro; el.disabled = ro; el.classList.remove('err');
+            });
+            g('invBody').classList.toggle('ro', ro);
+        }
+
+        function clearInvForm() {
+            ['sku', 'productName', 'vendor', 'sph_right', 'cyl_right', 'axis_right',
+                'sph_left', 'cyl_left', 'axis_left', 'lensType', 'frameSize', 'category',
+                'lensColor', 'lensMaterial', 'frameMaterial', 'frameColor', 'lensGender',
+                'quantity', 'notes'].forEach(id => { g(id).value = ''; g(id).classList.remove('err'); });
+        }
+
+        function openInsertModalForNew(skuValue) {
+            clearInvForm();
+            isEditingMode = false; currentEditIndex = -1;
+            g('modalTitle').textContent = 'Create New Item';
+            g('modalSub').textContent = 'Fill in details below';
+            g('sku').value = skuValue;
+
+            setInvRO(false);
+            g('sku').disabled = true;
+            g('btn-inv-save').style.display = ''; g('btn-inv-cancel').style.display = ''; g('btn-inv-back').style.display = 'none';
+            openM('inventoryModal');
+        }
+
+        function viewInventory(index) {
+            const item = inventoryData[index];
+            clearInvForm();
+            isEditingMode = false; currentEditIndex = index;
+            g('modalTitle').textContent = 'View Inventory'; g('modalSub').textContent = item.sku;
+            populateInvForm(item);
+            setInvRO(true);
+            g('btn-inv-save').style.display = 'none'; g('btn-inv-cancel').style.display = 'none'; g('btn-inv-back').style.display = '';
+            openM('inventoryModal');
+        }
+
+        function editInventory(index) {
+            const item = inventoryData[index];
+            clearInvForm();
+            isEditingMode = true; currentEditIndex = index;
+            g('modalTitle').textContent = 'Update Item'; g('modalSub').textContent = `Editing ${item.sku}`;
+            populateInvForm(item);
+            setInvRO(false);
+            g('sku').disabled = true;
+            g('btn-inv-save').style.display = ''; g('btn-inv-cancel').style.display = ''; g('btn-inv-back').style.display = 'none';
+            openM('inventoryModal');
+        }
+
+        function populateInvForm(item) {
+            g('sku').value = item.sku || '';
+            g('productName').value = item.description || item.product_name || '';
+            g('category').value = item.category || '';
+            g('quantity').value = item.available_qty || item.quantity || 0;
+            g('vendor').value = item.vendor || '';
+            g('lensType').value = item.lensType || item.lens_type || '';
+            g('frameSize').value = item.frameSize || item.frame_size || '';
+            g('lensColor').value = item.lensColor || item.lens_color || '';
+            g('lensMaterial').value = item.lensMaterial || item.lens_material || '';
+            g('frameMaterial').value = item.frameMaterial || item.frame_material || '';
+            g('frameColor').value = item.frameColor || item.frame_color || '';
+            g('lensGender').value = item.lensGender || item.lens_gender || '';
+            g('notes').value = item.notes || '';
+
+            g('sph_right').value = item.od_sph !== null ? item.od_sph : '';
+            g('cyl_right').value = item.od_cyl !== null ? item.od_cyl : '';
+            g('axis_right').value = item.od_axis !== null ? item.od_axis : '';
+            g('sph_left').value = item.os_sph !== null ? item.os_sph : '';
+            g('cyl_left').value = item.os_cyl !== null ? item.os_cyl : '';
+            g('axis_left').value = item.os_axis !== null ? item.os_axis : '';
+        }
+
+        async function saveInventory() {
+            g('invAlert').style.display = 'none';
+            g('invSuccess').style.display = 'none';
+            document.querySelectorAll('.err').forEach(e => e.classList.remove('err'));
+
+            let ok = true;
+            ['sku', 'productName', 'category'].forEach(id => {
+                if (!g(id).value.trim()) { g(id).classList.add('err'); ok = false; }
+            });
+
+            const qtyVal = parseInt(g('quantity').value);
+            if (isNaN(qtyVal) || qtyVal <= 0) { g('quantity').classList.add('err'); ok = false; }
+
+            if (!ok) {
+                g('invError').textContent = "Complete required fields";
+                g('invAlert').style.display = 'flex';
+
+                const firstErr = document.querySelector('.err');
+                if (firstErr) {
+                    firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstErr.focus(); // Brings focus to the input so they can type immediately
+                }
+                return;
+            }
+
+            const btn = g('btn-inv-save');
+            const origText = btn.innerHTML;
+            btn.disabled = true; btn.innerHTML = `${btnSpinner} Saving...`;
+            document.body.classList.add('busy');
+
+            let stock_to_add = 0;
+            if (isEditingMode && currentEditIndex !== -1) {
+                const prevQty = inventoryData[currentEditIndex].available_qty || inventoryData[currentEditIndex].quantity || 0;
+                stock_to_add = qtyVal - prevQty;
+            }
+
+            const payload = {
+                sku: g('sku').value.trim(),
+                description: g('productName').value.trim(),
+                category: g('category').value,
+                quantity: isEditingMode ? undefined : qtyVal,
+                stock_to_add: isEditingMode ? stock_to_add : undefined,
+                vendor: g('vendor').value.trim(),
+                lensType: g('lensType').value,
+                frameSize: g('frameSize').value,
+                lensColor: g('lensColor').value,
+                lensMaterial: g('lensMaterial').value,
+                frameMaterial: g('frameMaterial').value,
+                frameColor: g('frameColor').value,
+                lensGender: g('lensGender').value,
+                notes: g('notes').value.trim(),
+                od_sph: g('sph_right').value || null, od_cyl: g('cyl_right').value || null, od_axis: g('axis_right').value || null,
+                os_sph: g('sph_left').value || null, os_cyl: g('cyl_left').value || null, os_axis: g('axis_left').value || null
+            };
+
+            if (currentCoordinatorId) payload.coordinator_id = currentCoordinatorId;
+
+            const method = isEditingMode ? 'PUT' : 'POST';
+            const url = isEditingMode ? `${INVENTORY_API_URL}/inventory/sku/${payload.sku}` : `${INVENTORY_API_URL}/inventory`;
+
+            try {
+                const res = await fetch(url, { method: method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                const json = await res.json();
+
+                if (json.ok) {
+                    g('invSuccessMsg').textContent = isEditingMode ? 'Updated successfully!' : 'Saved successfully!';
+                    g('invSuccess').style.display = 'flex';
+                    setTimeout(() => { closeM('inventoryModal'); loadInventory(); }, 800);
+                } else {
+                    g('invError').textContent = json.error.validation_errors ? json.error.validation_errors.join(' | ') : json.error;
+                    g('invAlert').style.display = 'flex';
+                }
+            } catch (err) {
+                g('invError').textContent = "Network error.";
+                g('invAlert').style.display = 'flex';
+            } finally {
+                btn.disabled = false; btn.innerHTML = origText;
+                document.body.classList.remove('busy');
+            }
+        }
+
+        // ─── BULK UPLOAD ──────────────────────────────────────────────────
+        function resetUploadModal() {
+            g('excelFile').value = '';
+            g('uploadPreviewContainer').style.display = 'none';
+            g('previewTableBody').innerHTML = '';
+            g('confirmImportBtn').disabled = true;
+            g('downloadReportBtn').style.display = 'none';
+            parsedUploadRows = [];
+        }
+
+        const dropZone = g('dropZone');
+        const excelFile = g('excelFile');
+
+        dropZone.addEventListener('click', () => excelFile.click());
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.borderColor = "var(--teal)"; dropZone.style.background = "#f0f8fb"; });
+        dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = ""; dropZone.style.background = ""; });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault(); dropZone.style.borderColor = ""; dropZone.style.background = "";
+            if (e.dataTransfer.files.length > 0) { excelFile.files = e.dataTransfer.files; processUpload(e.dataTransfer.files[0]); }
+        });
+        excelFile.addEventListener('change', (e) => { if (e.target.files.length > 0) processUpload(e.target.files[0]); });
+
+        async function processUpload(file) {
+            document.body.classList.add('busy');
+            const formData = new FormData();
+            formData.append('file', file);
+            if (currentCoordinatorId) formData.append('coordinator_id', currentCoordinatorId);
+
+            try {
+                const res = await fetch(`${INVENTORY_API_URL}/inventory/bulk/validate`, { method: 'POST', body: formData });
+                const json = await res.json();
+
+                if (json.ok) {
+                    parsedUploadRows = json.data.rows;
+                    renderUploadPreview(json.data.rows, json.data.summary);
+                } else { alert(json.error); resetUploadModal(); }
+            } catch (e) {
+                alert("API connection failed during upload.");
+                resetUploadModal();
+            } finally {
+                document.body.classList.remove('busy');
+            }
+        }
+
+        function renderUploadPreview(rows, summary) {
+            const tb = g('previewTableBody');
+            tb.innerHTML = '';
+
+            rows.forEach(r => {
+                const bg = r.isValid ? 'var(--surface)' : 'var(--red-bg)';
+                const c1 = r.isValid ? 'var(--green)' : 'var(--red)';
+                const lbl = r.isValid ? 'Good' : 'Error';
+                const msgCol = r.isValid ? 'var(--text-3)' : 'var(--red)';
+
+                tb.innerHTML += `
+            <tr style="background:${bg}">
+                <td>Row ${r.row_num}</td>
+                <td><strong style="color:var(--navy)">${r.sku}</strong></td>
+                <td>${r.qty}</td>
+                <td style="color:${c1}; font-weight:700;">${lbl}</td>
+                <td style="font-size:12.5px; color:${msgCol}">${r.errorMsg}</td>
+            </tr>`;
+            });
+
+            g('previewSummary').textContent = `Valid Rows: ${summary.valid} | Errors: ${summary.invalid}`;
+            g('confirmImportBtn').disabled = (summary.valid === 0);
+            g('downloadReportBtn').style.display = (summary.invalid > 0) ? 'inline-block' : 'none';
+            g('uploadPreviewContainer').style.display = 'block';
+        }
+
+        function downloadErrorReport() {
+            const errors = parsedUploadRows.filter(r => !r.isValid);
+            if (!errors.length) return;
+            let csv = "Row Number,SKU,Provided Qty,Error Reason\n";
+            errors.forEach(r => csv += `Row ${r.row_num},"${r.sku}","${r.qty}","${r.errorMsg}"\n`);
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const link = document.createElement("a"); link.href = URL.createObjectURL(blob);
+            link.download = "bulk_upload_errors.csv"; link.click();
+        }
+
+        async function validateAndImportUpload() {
+            if (!parsedUploadRows.length) return;
+            const btn = g('confirmImportBtn');
+            const origText = btn.innerHTML;
+            btn.disabled = true; btn.innerHTML = `${btnSpinner} Importing...`;
+            document.body.classList.add('busy');
+
+            try {
+                const payload = { rows: parsedUploadRows };
+                if (currentCoordinatorId) payload.coordinator_id = currentCoordinatorId;
+
+                const res = await fetch(`${INVENTORY_API_URL}/inventory/bulk/import`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const json = await res.json();
+                if (json.ok) {
+                    alert(`Success!\nInserted: ${json.data.inserted}\nUpdated: ${json.data.updated}\nSkipped: ${json.data.skipped}`);
+                    closeM('uploadModal'); loadInventory();
+                } else alert(json.error);
+            } catch (e) {
+                alert("Network error processing import.");
+            } finally {
+                btn.disabled = false; btn.innerHTML = origText;
+                document.body.classList.remove('busy');
+            }
+        }
+
+        // ─── DELETE / REDUCE STOCK ────────────────────────────────────────
+        function openDeleteModal(index) {
+            currentDeleteIndex = index;
+            const item = inventoryData[index];
+            g('deleteSkuText').textContent = `${item.sku} (${item.description || item.product_name || ''})`;
+            g('deleteAvailableQty').textContent = item.available_qty || item.quantity || 0;
+            g('deleteQtyInput').value = '';
+            g('deleteQtyInput').classList.remove('err');
+            g('delAlert').style.display = 'none';
+            g('confirmDeleteBtn').disabled = false;
+            openM('deleteModal');
+        }
+
+        g('deleteQtyInput').addEventListener('input', () => {
+            if (currentDeleteIndex === -1) return;
+            const item = inventoryData[currentDeleteIndex];
+            const avail = item.available_qty || item.quantity || 0;
+            const val = parseInt(g('deleteQtyInput').value);
+            const alertBox = g('delAlert');
+            const msg = g('deleteQtyError');
+            const btn = g('confirmDeleteBtn');
+
+            alertBox.style.display = 'none';
+            g('deleteQtyInput').classList.remove('err');
+            btn.disabled = false;
+
+            if (isNaN(val) || val <= 0) { g('deleteQtyInput').classList.add('err'); msg.textContent = 'Positive number required'; alertBox.style.display = 'flex'; btn.disabled = true; return; }
+            if (val > avail) { g('deleteQtyInput').classList.add('err'); msg.textContent = 'Cannot exceed available quantity'; alertBox.style.display = 'flex'; btn.disabled = true; }
+        });
+
+        async function submitDelete() {
+            if (currentDeleteIndex === -1) return;
+            const val = parseInt(g('deleteQtyInput').value);
+            const btn = g('confirmDeleteBtn');
+            const origText = btn.innerHTML;
+            btn.disabled = true; btn.innerHTML = `${btnSpinner} Deleting...`;
+            document.body.classList.add('busy');
+
+            try {
+                const payload = { quantity_to_remove: val };
+                if (currentCoordinatorId) payload.coordinator_id = currentCoordinatorId;
+
+                const res = await fetch(`${INVENTORY_API_URL}/inventory/sku/${inventoryData[currentDeleteIndex].sku}`, {
+                    method: 'DELETE', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const json = await res.json();
+
+                if (json.ok) {
+                    closeM('deleteModal'); loadInventory();
+                } else {
+                    g('deleteQtyError').textContent = json.error;
+                    g('delAlert').style.display = 'flex';
+                }
+            } catch (err) {
+                g('deleteQtyError').textContent = "Network error.";
+                g('delAlert').style.display = 'flex';
+            } finally {
+                btn.disabled = false; btn.innerHTML = origText;
+                document.body.classList.remove('busy');
+            }
+        }
+
+        // ─── INITIALIZE ───────────────────────────────────────────────────
+        document.querySelectorAll('.overlay').forEach(o => {
+            o.addEventListener('click', e => { if (e.target === o) closeM(o.id); });
+        });
+
+        // 1. Draw the UI and check auth INSTANTLY
+        if (typeof Auth !== 'undefined') Auth.checkAuth();
+        if (typeof Layout !== 'undefined') Layout.render('inventory');
+
+        // 2. Fetch the heavy data in the background after the UI is painted
+        window.onload = async () => {
+            const cannotCreateOrUpload = (currentRole === 'SysAdmin' || currentRole === 'Volunteer');
+            if (cannotCreateOrUpload) {
+                const btnUpload = document.getElementById('btn-upload-excel');
+                const btnAdd = document.getElementById('btn-add-inventory');
+                if (btnUpload) btnUpload.style.display = 'none';
+                if (btnAdd) btnAdd.style.display = 'none';
+            }
+
+            loadInventory(1);
+        };
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('keydown', function (e) {
+                if (['e', 'E'].includes(e.key)) {
+                    e.preventDefault();
+                }
+            });
+
+            input.addEventListener('input', function () {
+                this.value = this.value.replace(/[eE]/g, '');
+            });
+        });
+    </script>
+</body>
+
+</html>

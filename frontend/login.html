@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In – iCare Brighter Future Foundation</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap"
+    rel="stylesheet">
+  <script src="js/app-config-v2.js"></script>
+  <style>
+    :root {
+      --navy: #0e2340;
+      --navy-2: #152d52;
+      --navy-3: #1e3f6f;
+      --teal: #1a7fa6;
+      --gold: #f5a623;
+      --white: #ffffff;
+      --bg: #f0f4f8;
+      --text: #0e2340;
+      --text-2: #3a5470;
+      --text-3: #7090aa;
+      --border: #d0dde8;
+      --red: #d94040;
+      --red-bg: #fdf1f1;
+      --green: #1d9e6e;
+      --green-bg: #e6f7ee;
+      --r: 8px;
+      --rl: 12px;
+      --shl: 0 8px 40px rgba(14, 35, 64, .18);
+      --ease: cubic-bezier(.4, 0, .2, 1);
+      --sp: .18s;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 13.5px;
+      line-height: 1.5;
+      min-height: 100%;
+    }
+
+    svg {
+      display: inline-block;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+
+    .bg-mesh {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      overflow: hidden;
+      pointer-events: none;
+      background: radial-gradient(circle at 0% 0%, rgba(26, 127, 166, 0.06) 0%, transparent 50%), radial-gradient(circle at 100% 100%, rgba(245, 166, 35, 0.06) 0%, transparent 50%), #f0f4f8;
+    }
+
+    .bg-mesh::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(14, 35, 64, 0.15) 1px, transparent 0);
+      background-size: 24px 24px;
+      opacity: 0.25;
+    }
+
+    .auth-container {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .auth-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: var(--rl);
+      box-shadow: var(--shl);
+      width: 100%;
+      max-width: 440px;
+      padding: 36px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--teal), var(--gold));
+    }
+
+    .auth-hdr {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .auth-logo {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      box-shadow: 0 4px 12px rgba(14, 35, 64, 0.18);
+    }
+
+    .auth-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: -0.5px;
+    }
+
+    .auth-subtitle {
+      font-size: 13px;
+      color: var(--text-3);
+      margin-top: 4px;
+    }
+
+    .form-grp {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+
+    .form-grp label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-inp-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .form-inp-wrap svg {
+      position: absolute;
+      left: 12px;
+      color: var(--text-3);
+      transition: color var(--sp);
+    }
+
+    .form-inp {
+      width: 100%;
+      padding: 10px 12px 10px 38px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      font-size: 13.5px;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+      font-family: inherit;
+      transition: border-color var(--sp), box-shadow var(--sp);
+    }
+
+    .form-inp:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(26, 127, 166, 0.12);
+    }
+
+    .form-inp:focus+svg {
+      color: var(--teal);
+    }
+
+    .btn-submit {
+      width: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 20px;
+      border-radius: var(--r);
+      border: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background var(--sp), transform var(--sp), box-shadow var(--sp);
+      background: var(--navy);
+      color: #fff;
+      margin-top: 10px;
+      position: relative;
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      background: var(--navy-2);
+      box-shadow: 0 4px 12px rgba(14, 35, 64, 0.15);
+    }
+
+    .btn-submit:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .btn-submit:disabled {
+      background: var(--navy-3);
+      opacity: 0.8;
+      cursor: not-allowed;
+    }
+
+    .btn-content {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-loader {
+      display: none;
+      width: 18px;
+      height: 18px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .alert-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: var(--r);
+      margin-bottom: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      animation: slideD 0.25s var(--ease);
+    }
+
+    .alert-icon {
+      font-size: 20px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .alert-error {
+      background: var(--red-bg);
+      border: 1.5px solid rgba(217, 64, 64, 0.15);
+      color: var(--red);
+    }
+
+    .alert-success {
+      background: var(--green-bg);
+      border: 1.5px solid rgba(29, 158, 110, 0.15);
+      color: var(--green);
+    }
+
+    @keyframes slideD {
+      from {
+        transform: translateY(-8px);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="bg-mesh"></div>
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-hdr">
+        <div class="auth-logo">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.5"
+            stroke-linecap="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+        </div>
+        <h1 class="auth-title">iCare Brighter Future</h1>
+        <p class="auth-subtitle">System Portal Login</p>
+      </div>
+
+      <div id="auth-msg" style="display:none"></div>
+
+      <form id="frm-login" onsubmit="handleLogin(event)">
+        <div class="form-grp">
+          <label for="inp-usr">Username</label>
+          <div class="form-inp-wrap">
+            <input type="text" id="inp-usr" class="form-inp" placeholder="Enter username" autocomplete="username">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="form-grp" style="margin-bottom: 22px;">
+          <label for="inp-pwd">Password</label>
+          <div class="form-inp-wrap">
+            <input type="password" id="inp-pwd" class="form-inp" placeholder="••••••••" autocomplete="current-password">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+          </div>
+        </div>
+
+        <button type="submit" id="btn-submit" class="btn-submit">
+          <div class="btn-content" id="btn-content">
+            Verify Credentials
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </div>
+          <svg class="btn-loader" id="btn-loader" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+            stroke-linecap="round">
+            <path d="M21 12a9 9 0 1 1-6.22-8.56" />
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    console.log("API_BASE =", window.API_BASE);
+    console.log("Auth =", window.Auth);
+
+    async function handleLogin(e) {
+      e.preventDefault();
+
+      const msgBox = document.getElementById('auth-msg');
+      const btn = document.getElementById('btn-submit');
+      const btnContent = document.getElementById('btn-content');
+      const btnLoader = document.getElementById('btn-loader');
+
+      const showMessage = (text, type) => {
+        msgBox.className = `alert-box alert-${type}`;
+
+        const icon = type === 'error'
+          ? '⚠️'
+          : '✅';
+
+        msgBox.innerHTML = `<span class="alert-icon">${icon}</span> <span>${text}</span>`;
+        msgBox.style.display = 'flex';
+      };
+
+      msgBox.style.display = 'none';
+
+      const usr = document.getElementById('inp-usr').value.trim();
+      const pwd = document.getElementById('inp-pwd').value;
+
+      if (!usr && !pwd) { showMessage("Username and password fields cannot be empty.", "error"); return; }
+      if (!usr) { showMessage("Username field cannot be empty.", "error"); return; }
+      if (!pwd) { showMessage("Password field cannot be empty.", "error"); return; }
+
+      btn.disabled = true;
+      btnContent.style.display = 'none';
+      btnLoader.style.display = 'block';
+
+      try {
+        const res = await fetch(`${API_BASE}/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: usr, password: pwd })
+        });
+
+        const jsonRes = await res.json();
+
+        if (!res.ok) {
+          if (res.status === 401 || res.status === 404) {
+            throw new Error("Invalid username and password.");
+          } 
+          else if (res.status === 403) {
+            throw new Error("This account has been deactivated. Please contact your administrator.");
+          }
+          else {
+            throw new Error("Something went wrong.");
+          }
+        }
+
+        if (jsonRes.data) {
+          Auth.setSession(jsonRes.data);
+        }
+
+        // Role-based redirection logic using role_name
+        const roleName = jsonRes.data?.role_name;
+        let redirectPage = 'campaign_management.html'; // Default fallback (e.g., for Optometrists)
+
+        if (roleName === 'SysAdmin' || roleName === 'Volunteer') {
+          redirectPage = 'patient_registration.html';
+        } else if (roleName === 'Coordinator') {
+          redirectPage = 'user_registration.html';
+        } else if (roleName === 'Optometrist') {
+          redirectPage = 'eye_exam.html'
+        }
+
+        showMessage("Login successful! Redirecting...", "success");
+        setTimeout(() => { window.location.href = redirectPage; }, 1000);
+
+      } catch (err) {
+        const errorText = err.message === "Invalid username and password." || "This account has been deactivated. Please contact your administrator." ? err.message : "Something went wrong.";
+        showMessage(errorText, "error");
+        btn.disabled = false;
+        btnContent.style.display = 'inline-flex';
+        btnLoader.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+
+</html>
